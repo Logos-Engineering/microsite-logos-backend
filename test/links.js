@@ -1,0 +1,65 @@
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+const should = chai.should();
+
+const app = require('../server');
+const models = require('../models/index');
+
+chai.use(chaiHttp);
+
+describe('GET /api/links', () => {
+  const data = [
+    {
+      name: "Link 1",
+      link: "url 1",
+      publish: true,
+      Category: {
+        name: "donasi"
+      }
+    },
+    {
+      name: "Link 2",
+      link: "url 2",
+      publish: false,
+      Category: {
+        name: "partnership"
+      }
+    },
+    {
+      name: "Link 3",
+      link: "url 3",
+      publish: true,
+      Category: {
+        name: "sosial media"
+      }
+    }
+  ]
+
+  // Init DB connection
+  before((done) => {
+    models.sequelize.sync({ force: true })
+      .then(() => {
+        console.log('Connection has been established successfully.');
+        return models.Microsite.bulkCreate(data, { include: [models.Category] });
+      })
+      .then(() => {
+        done();
+      })
+  });
+
+  describe('GET /api/links', () => {
+    it('should GET all links which column publish is true', (done) => {
+      chai.request(app)
+        .get('/api/links')
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property('data');
+          res.body.data.should.have.all.keys('donasi', 'sosial media')
+          done();
+        });
+    });
+  });
+
+
+})
+
