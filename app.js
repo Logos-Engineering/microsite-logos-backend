@@ -6,6 +6,7 @@ const cors = require('cors');
 
 const apiRoute = require('./routes/index');
 const db = require('./models/index');
+const middlewaresError = require('./middlewares/error');
 
 const app = express();
 
@@ -42,7 +43,10 @@ app.get('/', (req, res) => {
     message: 'Hello'
   })
 });
-
 app.use('/api', apiRoute);
+
+// Global Error Handler
+app.use(middlewaresError.notFound);
+app.use(middlewaresError.errorHandler);
 
 module.exports = app;
