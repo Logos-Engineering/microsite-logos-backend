@@ -3,7 +3,7 @@ const chaiHttp = require('chai-http');
 const should = chai.should();
 
 const app = require('../server');
-const models = require('../models/index');
+const model = require('../src/models/index');
 
 chai.use(chaiHttp);
 
@@ -33,18 +33,21 @@ describe('GET /api/links', () => {
         name: "sosial media"
       }
     }
-  ]
+  ];
 
-  // Init DB connection
+  // inisialisasi koneksi DB
   before((done) => {
-    models.sequelize.sync({ force: true })
+    model.sequelize.sync({ force: true })
       .then(() => {
         console.log('Connection has been established successfully.');
-        return models.Microsite.bulkCreate(data, { include: [models.Category] });
+        return model.Microsite.bulkCreate(data, { include: [model.Category] });
       })
       .then(() => {
         done();
       })
+      .catch((error) => {
+        done(error);
+      }) 
   });
 
   describe('GET /api/links', () => {

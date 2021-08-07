@@ -22,19 +22,19 @@ const sequelizeInstance = new Sequelize(
   }
 );
 
-let db = {
+let model = {
   Sequelize,
   sequelize: sequelizeInstance
 };
 
-db.Microsite = require('./Microsite')(sequelizeInstance, Sequelize);
-db.Category = require('./Category')(sequelizeInstance, Sequelize);
-db.Webinar = require('./Webinar')(sequelizeInstance, Sequelize);
-db.User = require('./User')(sequelizeInstance, Sequelize);
+model.Microsite = require('./Microsite')(sequelizeInstance, Sequelize);
+model.Category = require('./Category')(sequelizeInstance, Sequelize);
+model.Webinar = require('./Webinar')(sequelizeInstance, Sequelize);
+model.User = require('./User')(sequelizeInstance, Sequelize);
 
-db.Category.hasMany(db.Microsite);
-db.Microsite.belongsTo(db.Category);
-db.Webinar.hasMany(db.Microsite, { allowNull: true });
-db.Microsite.belongsTo(db.Webinar);
+model.Category.hasMany(model.Microsite);
+model.Microsite.belongsTo(model.Category);
+model.Webinar.hasMany(model.Microsite, { allowNull: true });
+model.Microsite.belongsTo(model.Webinar);
 
-module.exports = db;
+module.exports = model;

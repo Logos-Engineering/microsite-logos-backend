@@ -1,25 +1,20 @@
-const router = require('express').Router();
-const db = require('../models/index');
+const model = require('../models/index');
 
-/**
- * Get all links based on publishing column
- * @return array of object
- */
- router.get('/', async (req, res) => {
+const getAllLinksPublic = async (req, res, next) => {
   try {
-    // Find all links on the microsite table which publish column is true
-    const dataLinks = await db.Microsite.findAll({
+    // dapatkan semua link berdasarkan field publish bernilai true
+    const dataLinks = await model.Microsite.findAll({
       attributes: ['name', 'link'],
       where: {
         publish: true
       },
       include: [
         {
-          model: db.Category,
+          model: model.Category,
           attributes: ['name'],
         },
         {
-          model: db.Webinar,
+          model: model.Webinar,
           attributes: ['title', 'image', 'summary']
         }
       ]
@@ -28,7 +23,7 @@ const db = require('../models/index');
     let reconstructData = [];
 
     if(dataLinks.length > 0) {
-      // Grouping value of property based on category
+      // pengelompokan data link berdasarkan kategori
       reconstructData = dataLinks.reduce((map, value) => {
         map[value.Category.name] = [
           ...(map[value.Category.name] || []),
@@ -47,6 +42,6 @@ const db = require('../models/index');
   } catch (error) {
     return next(error);
   }
-});
+};
 
-module.exports = router;
+module.exports = { getAllLinksPublic };
