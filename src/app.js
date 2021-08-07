@@ -5,30 +5,33 @@ const helmet = require('helmet');
 const cors = require('cors');
 
 const apiRoute = require('./routes/index');
-const db = require('./models/index');
+const model = require('./models/index');
 const middlewaresError = require('./middlewares/error');
 
 const app = express();
 
-// DB connection
-(async function () {
-  try {
-
-    await db.sequelize.sync({ force: true });
-
-    // await db.sequelize.sync();
-    await db.sequelize.authenticate();
-    console.log("Connection has been established successfully.");
-    
-    const user = await db.User.create({
-        username: 'user test',
-        password: 'slslwww'
-    });
-    
-  } catch (error) {
-    console.error(error);
-  }
-})();
+if(process.env.NODE_ENV !== 'test') {
+  // koneksi db
+  (async function () {
+    try {
+      if (process.env.NODE_ENV === 'prod') {
+        await model.sequelize.sync();
+      } else {
+        await model.sequelize.sync({ force: true });
+      }
+      await model.sequelize.authenticate();
+      console.log("Connection has been established successfully.");
+      
+      await model.User.create({
+          username: 'user test',
+          password: 'slslwww'
+      });
+      
+    } catch (error) {
+      console.error(error);
+    }
+  })();
+}
 
 // Middleware
 app.use(morgan('dev'));
