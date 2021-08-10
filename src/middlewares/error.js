@@ -1,32 +1,41 @@
 function notFound(req, res, next) {
-  res.status(404);
-  const error = new Error(`🔍 - Not Found - ${req.originalUrl}`);
+  const error = new Error(`Not Found - ${req.originalUrl}`);
+  error.statusCode = 404;
   next(error);
 }
 
-function errorHandler(err, req, res, next) {
-  const statusCode = res.statusCode !== 200 ? res.statusCode : 500;
-  res.status(statusCode);
-  const isProdOrTest = process.env.NODE_ENV === 'prod' || process.env.NODE_ENV === 'test';
+function ClientErrors(messages, statusCode = 400) {
+  this.messages = messages;
+  this.statusCode = statusCode;
+  this.name = 'ClientErrors';
+  this.stack = (new Error()).stack;
+}
 
-  // Response for dev mode
-  if(!isProdOrTest) {
+function errorHandler(err, req, res, next) {
+  if(err.name === 'ClientErrors') {
+    console.error(err.stack);
+    res.status(err.statusCode);
     return res.json({
       error: {
-        message: err.message,
-        stack: err.stack
+        messages: err.messages,
       }
     });
   }
 
+  console.error(err.stack);
+
+  const statusCode = err.statusCode ? err.statusCode : 500;
+  res.status(statusCode);
+
   return res.json({
     error: {
-      message: err.message,
+      message: err.message || 'Internal server error',
     }
   });
 }
 
 module.exports = {
   notFound,
-  errorHandler
+  errorHandler,
+  ClientErrors
 };
