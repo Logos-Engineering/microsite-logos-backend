@@ -30,7 +30,7 @@ async function postLinkController(req, res, next) {
 
     // periksa jika kategori = webinar
     // if (category === 'webinar') {
-
+        // TODO: penanganan untuk upload gambar
     // }
 
     // memasukkan data link ke tabel microsite
