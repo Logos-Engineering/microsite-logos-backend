@@ -6,7 +6,7 @@ const getAllLinksPublic = async (req, res, next) => {
     const dataLinks = await model.Microsite.findAll({
       attributes: ['name', 'link'],
       where: {
-        publish: true
+        publish: true,
       },
       include: [
         {
@@ -15,14 +15,14 @@ const getAllLinksPublic = async (req, res, next) => {
         },
         {
           model: model.Webinar,
-          attributes: ['title', 'image', 'summary']
-        }
-      ]
+          attributes: ['title', 'image', 'summary'],
+        },
+      ],
     });
 
     let reconstructData = [];
 
-    if(dataLinks.length > 0) {
+    if (dataLinks.length > 0) {
       // pengelompokan data link berdasarkan kategori
       reconstructData = dataLinks.reduce((map, value) => {
         map[value.Category.name] = [
@@ -30,7 +30,7 @@ const getAllLinksPublic = async (req, res, next) => {
           {
             name: value.name,
             link: value.link,
-            webinar: value.Webinar
+            webinar: value.Webinar,
           },
         ];
         return map;
@@ -38,7 +38,6 @@ const getAllLinksPublic = async (req, res, next) => {
     }
 
     res.status(200).json({ data: reconstructData });
-
   } catch (error) {
     return next(error);
   }

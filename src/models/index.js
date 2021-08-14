@@ -11,20 +11,20 @@ const sequelizeInstance = new Sequelize(
     operatorsAliases: false,
     logging: false,
     options: {
-      port: dbConfig.PORT
+      port: dbConfig.PORT,
     },
     pool: {
       max: dbConfig.pool.max,
       min: dbConfig.pool.min,
       acquire: dbConfig.pool.acquire,
-      idle: dbConfig.pool.idle
-    }
-  }
+      idle: dbConfig.pool.idle,
+    },
+  },
 );
 
-let model = {
+const model = {
   Sequelize,
-  sequelize: sequelizeInstance
+  sequelize: sequelizeInstance,
 };
 
 model.Microsite = require('./Microsite')(sequelizeInstance, Sequelize);
