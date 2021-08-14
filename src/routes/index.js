@@ -1,5 +1,7 @@
 const router = require('express').Router();
+
 const links = require('./links');
+const dashboard = require('./dashboard');
 
 router.get('/', (req, res) => {
   res.json({
@@ -8,5 +10,6 @@ router.get('/', (req, res) => {
 });
 
 router.use('/links', links);
+router.use('/dashboard', dashboard);
 
 module.exports = router;
