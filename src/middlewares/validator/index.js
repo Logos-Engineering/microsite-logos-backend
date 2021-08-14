@@ -14,7 +14,7 @@ function validator(req, res, next) {
 
     next();
   } catch (error) {
-    return next(error);
+    next(error);
   }
 }
 
