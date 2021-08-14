@@ -1,5 +1,7 @@
+/* eslint-disable no-undef */
 const chai = require('chai');
 const chaiHttp = require('chai-http');
+
 const should = chai.should();
 
 const app = require('../server');
@@ -10,29 +12,29 @@ chai.use(chaiHttp);
 describe('GET /api/links', () => {
   const data = [
     {
-      name: "Link 1",
-      link: "url 1",
+      name: 'Link 1',
+      link: 'url 1',
       publish: true,
       Category: {
-        name: "donasi"
-      }
+        name: 'donasi',
+      },
     },
     {
-      name: "Link 2",
-      link: "url 2",
+      name: 'Link 2',
+      link: 'url 2',
       publish: false,
       Category: {
-        name: "partnership"
-      }
+        name: 'partnership',
+      },
     },
     {
-      name: "Link 3",
-      link: "url 3",
+      name: 'Link 3',
+      link: 'url 3',
       publish: true,
       Category: {
-        name: "sosial media"
-      }
-    }
+        name: 'sosial media',
+      },
+    },
   ];
 
   // inisialisasi koneksi DB
@@ -47,7 +49,7 @@ describe('GET /api/links', () => {
       })
       .catch((error) => {
         done(error);
-      }) 
+      });
   });
 
   describe('GET /api/links', () => {
@@ -57,12 +59,9 @@ describe('GET /api/links', () => {
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.have.property('data');
-          res.body.data.should.have.all.keys('donasi', 'sosial media')
+          res.body.data.should.have.all.keys('donasi', 'sosial media');
           done();
         });
     });
   });
-
-
-})
-
+});

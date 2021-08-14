@@ -10,7 +10,7 @@ const middlewaresError = require('./middlewares/error');
 
 const app = express();
 
-if(process.env.NODE_ENV !== 'test') {
+if (process.env.NODE_ENV !== 'test') {
   // koneksi db
   (async function () {
     try {
@@ -20,17 +20,16 @@ if(process.env.NODE_ENV !== 'test') {
         await model.sequelize.sync({ force: true });
       }
       await model.sequelize.authenticate();
-      console.log("Connection has been established successfully.");
-      
+      console.log('Connection has been established successfully.');
+
       await model.User.create({
-          username: 'user test',
-          password: 'slslwww'
+        username: 'user test',
+        password: 'slslwww',
       });
-      
     } catch (error) {
       console.error(error);
     }
-  })();
+  }());
 }
 
 // Middleware
@@ -43,8 +42,8 @@ app.use(express.json());
 // Route
 app.get('/', (req, res) => {
   res.json({
-    message: 'Hello'
-  })
+    message: 'Hello',
+  });
 });
 app.use('/api', apiRoute);
 

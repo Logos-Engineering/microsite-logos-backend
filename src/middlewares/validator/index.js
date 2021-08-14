@@ -1,6 +1,6 @@
 const { validationResult } = require('express-validator');
 
-const { ClientErrors } = require('../../middlewares/error');
+const { ClientErrors } = require('../error');
 
 function validator(req, res, next) {
   try {
@@ -13,10 +13,9 @@ function validator(req, res, next) {
     }
 
     next();
-    
   } catch (error) {
     return next(error);
   }
 }
 
-module.exports = { validator }
+module.exports = { validator };

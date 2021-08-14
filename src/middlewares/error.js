@@ -11,14 +11,14 @@ function ClientErrors(messages, statusCode = 400) {
   this.stack = (new Error()).stack;
 }
 
-function errorHandler(err, req, res, next) {
-  if(err.name === 'ClientErrors') {
+function errorHandler(err, req, res) {
+  if (err.name === 'ClientErrors') {
     console.error(err.stack);
     res.status(err.statusCode);
     return res.json({
       error: {
         messages: err.messages,
-      }
+      },
     });
   }
 
@@ -30,12 +30,12 @@ function errorHandler(err, req, res, next) {
   return res.json({
     error: {
       message: err.message || 'Internal server error',
-    }
+    },
   });
 }
 
 module.exports = {
   notFound,
   errorHandler,
-  ClientErrors
+  ClientErrors,
 };

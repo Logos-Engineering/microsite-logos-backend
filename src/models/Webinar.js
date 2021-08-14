@@ -3,7 +3,7 @@ module.exports = function (sequelizeInstance, Sequelize) {
     id: {
       type: Sequelize.UUID,
       defaultValue: Sequelize.UUIDV4,
-      primaryKey: true
+      primaryKey: true,
     },
     title: {
       type: Sequelize.STRING,
@@ -16,6 +16,6 @@ module.exports = function (sequelizeInstance, Sequelize) {
     summary: {
       type: Sequelize.STRING,
       allowNull: false,
-    }
+    },
   });
 };

@@ -1,4 +1,5 @@
 require('dotenv').config();
+
 module.exports = {
   HOST: process.env.HOST_DB,
   PORT: process.env.PORT_DB,
@@ -10,6 +11,6 @@ module.exports = {
     max: 5,
     min: 0,
     acquire: 30000,
-    idle: 10000
-  }
+    idle: 10000,
+  },
 };
