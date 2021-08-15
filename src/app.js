@@ -6,7 +6,8 @@ const cors = require('cors');
 
 const apiRoute = require('./routes/index');
 const model = require('./models/index');
-const middlewaresError = require('./middlewares/error');
+const errorMiddleware = require('./middlewares/error');
+const uploadMiddleware = require('./middlewares/uploadImage');
 
 const app = express();
 
@@ -39,6 +40,11 @@ app.use(cors());
 // parse application/json
 app.use(express.json());
 
+// Set folder public menjadi static-file
+app.use('/public', express.static(`${process.cwd()}/public`));
+
+app.use(uploadMiddleware);
+
 // Route
 app.get('/', (req, res) => {
   res.json({
@@ -48,7 +54,7 @@ app.get('/', (req, res) => {
 app.use('/api', apiRoute);
 
 // Global Error Handler
-app.use(middlewaresError.notFound);
-app.use(middlewaresError.errorHandler);
+app.use(errorMiddleware.notFound);
+app.use(errorMiddleware.errorHandler);
 
 module.exports = app;
