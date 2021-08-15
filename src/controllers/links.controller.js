@@ -8,7 +8,7 @@ async function postLinkController(req, res, next) {
     publish,
     category,
     titleWebinar,
-    summaryWebinar
+    summaryWebinar,
   } = req.body;
 
   try {
@@ -18,8 +18,6 @@ async function postLinkController(req, res, next) {
         name: category,
       },
     });
-
-    console.log(categoryId);
 
     let payload = {
       name,
