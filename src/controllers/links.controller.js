@@ -20,7 +20,7 @@ async function postLinkController(req, res, next) {
     });
 
     // payload untuk tabel microsite
-    let payload = {
+    const payload = {
       name,
       link,
       publish,
@@ -81,4 +81,42 @@ async function postLinkController(req, res, next) {
   }
 }
 
-module.exports = { postLinkController };
+async function getAllLinksController(req, res, next) {
+  try {
+    const result = await model.Microsite.findAll({
+      attributes: ['id', 'name', 'link', 'publish'],
+      include: [
+        {
+          model: model.Category,
+          attributes: ['name'],
+        },
+        {
+          model: model.Webinar,
+          attributes: ['title', 'image', 'summary'],
+        },
+      ],
+    });
+
+    // menyusun property
+    const orderingProp = result.map((value) => ({
+      id: value.id,
+      name: value.name,
+      link: value.link,
+      publish: value.publish,
+      category: value.Category.name,
+      // jika webinar ada maka tambahkan property title, image, summary
+      ...value.Webinar && { title: value.Webinar.title },
+      ...value.Webinar && { image: value.Webinar.image },
+      ...value.Webinar && { summary: value.Webinar.summary },
+    }));
+    res.status(200);
+    res.json({ data: orderingProp });
+  } catch (error) {
+    next(error);
+  }
+}
+
+module.exports = {
+  postLinkController,
+  getAllLinksController,
+};

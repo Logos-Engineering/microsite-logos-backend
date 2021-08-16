@@ -10,6 +10,8 @@ const model = require('../../src/models/index');
 
 chai.use(chaiHttp);
 
+const endpoint = '/api/dashboard/links';
+
 describe('Test CRUD link data', () => {
   before((done) => {
     model.sequelize.sync({ force: true })
@@ -32,7 +34,7 @@ describe('Test CRUD link data', () => {
     describe('POST /api/dashboard/links', () => {
       it('should have response status 201 value and data property with correct value', (done) => {
         chai.request(server)
-          .post('/api/dashboard/links')
+          .post(endpoint)
           .send(linkdata)
           .end((err, res) => {
             if (err) done(err);
@@ -54,7 +56,7 @@ describe('Test CRUD link data', () => {
 
       it('should have response status 201 value and data property with correct value, but this is webinar category', (done) => {
         chai.request(server)
-          .post('/api/dashboard/links')
+          .post(endpoint)
           .field('name', 'link webinar')
           .field('link', 'https://sksks.com/shushush')
           .field('publish', false)
@@ -80,6 +82,21 @@ describe('Test CRUD link data', () => {
             expect(data).to.have.property('image').that.is.a('string');
             expect(data).to.have.deep.property('summary', 'jwiwjijwiiw');
 
+            done();
+          });
+      });
+    });
+
+    describe('GET /api/dashboard/links', () => {
+      it('should have response status code 200 and have data property which type is an array', (done) => {
+        chai.request(server)
+          .get(endpoint)
+          .end((err, res) => {
+            if (err) done(err);
+
+            expect(res).to.have.status(200);
+            expect(res.body).to.have.property('data').that.is.an('array');
+            expect(res.body.data).to.have.lengthOf.at.least(1);
             done();
           });
       });
@@ -128,7 +145,7 @@ describe('Test CRUD link data', () => {
       invalidLinkData.forEach((data) => {
         it('should respond with status 400 value and also have messages property', (done) => {
           chai.request(server)
-            .post('/api/dashboard/links')
+            .post(endpoint)
             .send(data)
             .end((err, res) => {
               if (err) done(err);
@@ -181,7 +198,7 @@ describe('Test CRUD link data', () => {
       invalidLinkDataWebinar.forEach((data, index) => {
         it(`should respond with status value 400 and have error property. ${index}th index`, (done) => {
           chai.request(server)
-            .post('/api/dashboard/links')
+            .post(endpoint)
             .field('name', data.name)
             .field('link', data.link)
             .field('publish', data.publish)
@@ -200,7 +217,7 @@ describe('Test CRUD link data', () => {
 
       it('should respond with status value 400 and have error property', (done) => {
         chai.request(server)
-          .post('/api/dashboard/links')
+          .post(endpoint)
           .field('name', 'hsuhuhush')
           .field('link', 'https://swskow.com')
           .field('publish', true)
