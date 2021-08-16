@@ -13,7 +13,7 @@ function ClientErrors(messages, statusCode = 400) {
 
 function errorHandler(err, req, res, next) {
   if (err.name === 'ClientErrors') {
-    // console.error(err.stack);
+    console.error(err.stack);
     res.status(err.statusCode);
     return res.json({
       error: {
