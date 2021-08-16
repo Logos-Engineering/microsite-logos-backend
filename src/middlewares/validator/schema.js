@@ -15,7 +15,7 @@ const linkSchema = [
   check('link').exists({ checkFalsy: true, checkNull: true }).isURL(optUrl)
     .isLength({ min: 2, max: undefined })
     .withMessage('Link is required and it must be URL type which length of string at least 2 characters'),
-  check('publish').exists({ checkFalsy: true, checkNull: true }).isBoolean()
+  check('publish').exists({ checkFalsy: false, checkNull: true }).isBoolean()
     .toBoolean()
     .withMessage('Publish field is required and it must be boolean type'),
   check('category').exists({ checkFalsy: true, checkNull: true }).isString()
