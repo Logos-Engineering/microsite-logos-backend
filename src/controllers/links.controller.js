@@ -30,7 +30,7 @@ async function postLinkController(req, res, next) {
     // periksa jika kategori = webinar
     // maka simpan gambar yang diupload
     if (category === 'webinar') {
-      // jika gambar tidak diupload maka lempar error
+      // jika gambar tidak diupload maka respon dengan error
       if (!req.file) {
         const error = new Error('Image has to upload');
         error.statusCode = 400;
