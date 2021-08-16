@@ -1,4 +1,8 @@
+/* eslint-disable no-undef */
+const fs = require('fs');
+
 const model = require('../models/index');
+const { ClientErrors } = require('../middlewares/error');
 
 async function postLinkController(req, res, next) {
   // mengambil payload yang telah lolos dari validator
@@ -116,7 +120,100 @@ async function getAllLinksController(req, res, next) {
   }
 }
 
+async function putLinkByIdController(req, res, next) {
+  const {
+    name,
+    link,
+    publish,
+    category,
+    titleWebinar,
+    summaryWebinar,
+  } = req.body;
+
+  const linkId = req.params.id;
+
+  try {
+    // cek data link berdasarkan parameter id
+    const dataMicrosite = await model.Microsite.findOne({
+      where: {
+        id: linkId,
+      },
+    });
+
+    if (!dataMicrosite) {
+      const error = new Error('Data is not found');
+      error.statusCode = 404;
+      throw error;
+    }
+
+    // dapatkan atau buat categori
+    const categoryId = await model.Category.findOrCreate({
+      where: {
+        name: category,
+      },
+    });
+
+    dataMicrosite.name = name;
+    dataMicrosite.link = link;
+    dataMicrosite.publish = publish;
+    dataMicrosite.CategoryId = categoryId[0].id;
+
+    let updateWebinar;
+
+    if (category === 'webinar') {
+      // jika gambar tidak diupload maka respon dengan error
+      if (!req.file) {
+        const error = new Error('Image has to upload');
+        error.statusCode = 400;
+        throw error;
+      }
+
+      const webinarId = dataMicrosite.WebinarId;
+
+      // cek data webinar
+      const dataWebinar = await model.Webinar.findOne({
+        where: {
+          id: webinarId,
+        },
+      });
+      // menghapus gambar lama
+      fs.unlink(`${process.cwd()}/${dataWebinar.image}`, (err) => {
+        if (err) {
+          throw new Error('Internal server error');
+        }
+      });
+
+      dataWebinar.title = titleWebinar;
+      dataWebinar.image = req.file.path;
+      dataWebinar.summary = summaryWebinar;
+
+      // perbarui data webinar
+      updateWebinar = await dataWebinar.save();
+    }
+
+    // perbarui data link
+    const updateMicrosite = await dataMicrosite.save();
+
+    res.status(200);
+    res.json({
+      data: {
+        id: updateMicrosite.id,
+        name: updateMicrosite.name,
+        link: updateMicrosite.link,
+        publish: updateMicrosite.publish,
+        category: categoryId[0].name,
+        ...category === 'webinar' && { title: updateWebinar.title },
+        ...category === 'webinar' && { image: updateWebinar.image },
+        ...category === 'webinar' && { summary: updateWebinar.summary },
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   postLinkController,
   getAllLinksController,
+  putLinkByIdController,
 };
