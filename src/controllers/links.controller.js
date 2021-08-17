@@ -2,7 +2,6 @@
 const fs = require('fs');
 
 const model = require('../models/index');
-const { ClientErrors } = require('../middlewares/error');
 
 async function postLinkController(req, res, next) {
   // mengambil payload yang telah lolos dari validator
@@ -212,8 +211,71 @@ async function putLinkByIdController(req, res, next) {
   }
 }
 
+async function deleteLinkByIdController(req, res, next) {
+  const linkId = req.params.id;
+
+  try {
+    // ambil data link berdasarkan id
+    const dataMicrosite = await model.Microsite.findOne({
+      where: {
+        id: linkId,
+      },
+    });
+
+    // jika data link tidak ditemukan
+    if (!dataMicrosite) {
+      const error = new Error('Link data is not found');
+      error.statusCode = 404;
+      throw error;
+    }
+
+    const webinarId = dataMicrosite.WebinarId;
+
+    if (webinarId != null) {
+      const dataWebinar = await model.Webinar.findOne({
+        where: {
+          id: webinarId,
+        },
+      });
+
+      const pathImg = dataWebinar.image;
+
+      // hapus gambar webinar
+      fs.unlink(`${process.cwd()}/${pathImg}`, (err) => {
+        if (err) {
+          const error = new Error('Fail deleted an image file');
+          error.statusCode = 500;
+          throw error;
+        }
+      });
+
+      // hapus data webinar
+      await model.Webinar.destroy({
+        where: {
+          id: webinarId,
+        },
+      });
+    }
+
+    // hapus data link
+    await model.Microsite.destroy({
+      where: {
+        id: linkId,
+      },
+    });
+
+    res.status(200);
+    res.json({
+      message: 'Successfully deleted link data',
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   postLinkController,
   getAllLinksController,
   putLinkByIdController,
+  deleteLinkByIdController,
 };
