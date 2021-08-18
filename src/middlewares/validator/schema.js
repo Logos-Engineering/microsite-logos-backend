@@ -14,15 +14,13 @@ const linkSchema = [
     .bail()
     .isString()
     .bail()
-    .isLength({ min: 2, max: 50 })
-    .bail(),
+    .isLength({ min: 2, max: 50 }),
   check('link', 'Link is required and it must be URL type which length of string at least 2 characters')
     .exists({ checkFalsy: true, checkNull: true })
     .bail()
     .isURL(optUrl)
     .bail()
-    .isLength({ min: 2, max: undefined })
-    .bail(),
+    .isLength({ min: 2, max: undefined }),
   check('publish', 'Publish field is required and it must be boolean type')
     .exists({ checkFalsy: false, checkNull: true })
     .bail()
@@ -34,22 +32,19 @@ const linkSchema = [
     .bail()
     .isString()
     .bail()
-    .isLength({ min: 2, max: 100 })
-    .bail(),
+    .isLength({ min: 2, max: 100 }),
   check('title', 'Webinar title is required and it must be string type which length of string at least 2 characters')
     .optional({ checkFalsy: true })
     .bail()
     .isString()
     .bail()
-    .isLength({ min: 2, max: 300 })
-    .bail(),
-  check('summary', 'Webinar summary is required and it must be string type which length of string at least 5 characters')
+    .isLength({ min: 2, max: 300 }),
+  check('summary', 'Webinar summary is required and it must be string type which length of the string from 5 up to 500 characters')
     .optional({ checkFalsy: true })
     .bail()
     .isString()
     .bail()
-    .isLength({ min: 5, max: undefined })
-    .bail(),
+    .isLength({ min: 5, max: 500 }),
 ];
 
 // skema untuk data user
@@ -59,8 +54,11 @@ const userSchema = [
     .bail()
     .isString()
     .bail()
-    .isLength({ min: 5, max: 20 })
-    .bail(),
+    .isLength({ min: 5, max: 20 }),
+  check('password', 'Minimum length of password is 8')
+    .isLength({ min: 8 })
+    .bail()
+    .isString(),
 ];
 
 module.exports = { linkSchema, userSchema };

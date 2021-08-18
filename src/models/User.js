@@ -38,7 +38,7 @@ module.exports = function (sequelizeInstance, Sequelize) {
   User.beforeUpdate(setSaltAndPassword);
 
   // return true if input password encrypted is equal with the password that is saved on DB
-  User.prototype.verifyPassword = function (inputPassword) {
+  User.prototype.verifyPassword = (inputPassword) => {
     return encryptPassword(inputPassword, this.salt) === this.password;
   };
 
