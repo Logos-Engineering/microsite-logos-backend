@@ -41,7 +41,7 @@ describe('GET /api/links', () => {
   before((done) => {
     model.sequelize.sync({ force: true })
       .then(() => {
-        console.log('Connection has been established successfully.');
+        process.stdout.write(`Connection has been established successfully.\n`);
         return model.Microsite.bulkCreate(data, { include: [model.Category] });
       })
       .then(() => {

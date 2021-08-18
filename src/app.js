@@ -21,14 +21,14 @@ if (process.env.NODE_ENV !== 'test') {
         await model.sequelize.sync({ force: true });
       }
       await model.sequelize.authenticate();
-      console.log('Connection has been established successfully.');
+      process.stdout.write(`Connection has been established successfully.\n`);
 
       await model.User.create({
         username: 'user test',
         password: 'slslwww',
       });
     } catch (error) {
-      console.error(error);
+      process.stdout(error);
     }
   }());
 }

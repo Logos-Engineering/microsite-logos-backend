@@ -18,7 +18,7 @@ function validator(req, res, next) {
         });
       }
 
-      const arr = errors.array().map((obj) => obj.msg);
+      const arr = errors.array().map(({ msg, param }) => ({ [param]: msg }));
       const error = new ClientErrors(arr);
       throw error;
     }
