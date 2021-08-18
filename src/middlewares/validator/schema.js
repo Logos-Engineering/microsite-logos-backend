@@ -61,6 +61,8 @@ const userSchema = [
     .bail()
     .isLength({ min: 5, max: 20 })
     .bail(),
+  check('password', 'Minimum length of password is 8')
+    .isLength({ min: 8 }),
 ];
 
 module.exports = { linkSchema, userSchema };

@@ -4,14 +4,20 @@ const router = require('express').Router();
 const {
   postLinkController, getAllLinksController, putLinkByIdController, deleteLinkByIdController,
 } = require('../controllers/links.controller');
+
+const { postUserController } = require('../controllers/users.controller');
+
 // validator
-const { linkSchema } = require('../middlewares/validator/schema');
+const { linkSchema, userSchema } = require('../middlewares/validator/schema');
 const { validator } = require('../middlewares/validator/index');
 
-// api/dashboard/links
+// /api/dashboard/links
 router.post('/links', linkSchema, validator, postLinkController);
 router.get('/links', getAllLinksController);
 router.put('/links/:id', linkSchema, validator, putLinkByIdController);
 router.delete('/links/:id', deleteLinkByIdController);
+
+// /api/dashboard/users
+router.post('/users', userSchema, validator, postUserController);
 
 module.exports = router;
