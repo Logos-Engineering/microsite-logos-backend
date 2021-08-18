@@ -129,7 +129,7 @@ describe('Test CRUD link data', () => {
   before((done) => {
     model.sequelize.sync({ force: true })
       .then(() => {
-        console.log('DB connection has been established successfully.');
+        process.stdout.write(`Connection has been established successfully.\n`);
         done();
       }).catch((error) => {
         done(error);
