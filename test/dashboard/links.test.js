@@ -29,9 +29,9 @@ describe('Test CRUD link data', () => {
     link: 'https://sksks.com/shushush',
     publish: false,
     category: 'webinar',
-    titleWebinar: 'Webinar 1',
-    imageWebinar: fs.readFileSync(`${process.cwd()}/testing.jpg`),
-    summaryWebinar: 'jwiwjijwiiw',
+    title: 'Webinar 1',
+    image: fs.readFileSync(`${process.cwd()}/testing.jpg`),
+    summary: 'jwiwjijwiiw',
   };
 
   const linkDataUpdate = {
@@ -46,9 +46,9 @@ describe('Test CRUD link data', () => {
     link: 'https://sksks.com/shushush',
     publish: true,
     category: 'webinar',
-    titleWebinar: 'Webinar Update',
-    imageWebinar: fs.readFileSync(`${process.cwd()}/testing.jpg`),
-    summaryWebinar: 'jwiwjijwiiw',
+    title: 'Webinar Update',
+    image: fs.readFileSync(`${process.cwd()}/testing.jpg`),
+    summary: 'jwiwjijwiiw',
   };
 
   const invalidLinkData = [
@@ -94,35 +94,35 @@ describe('Test CRUD link data', () => {
       link: 'https://url1.com',
       publish: true,
       category: 'webinar',
-      titleWebinar: 'webinar 1',
-      imageWebinar: fs.readFileSync(`${process.cwd()}/testing.jpg`),
-      summaryWebinar: 1222,
+      title: 'webinar 1',
+      image: fs.readFileSync(`${process.cwd()}/testing.jpg`),
+      summary: 1222,
     },
     {
       name: 'link 2',
       link: 'https://url1.com',
       publish: true,
       category: 'webinar',
-      titleWebinar: 'webinar 1',
-      imageWebinar: fs.readFileSync(`${process.cwd()}/testing.svg`),
-      summaryWebinar: 'ini testing',
+      title: 'webinar 1',
+      image: fs.readFileSync(`${process.cwd()}/testing.svg`),
+      summary: 'ini testing',
     },
     {
       name: 'link 3',
       link: 'https://url1.com',
       publish: true,
       category: 'webinar',
-      titleWebinar: '',
-      imageWebinar: '',
-      summaryWebinar: 'ini testing',
+      title: '',
+      image: '',
+      summary: 'ini testing',
     },
     {
       name: 'link 4',
       link: 'https://url1.com',
       publish: true,
       category: 'webinar',
-      titleWebinar: 'webinar 1',
-      summaryWebinar: 'ini testing',
+      title: 'webinar 1',
+      summary: 'ini testing',
     },
   ];
 
@@ -167,9 +167,9 @@ describe('Test CRUD link data', () => {
         .field('link', linkDataWebinar.link)
         .field('publish', linkDataWebinar.publish)
         .field('category', linkDataWebinar.category)
-        .field('titleWebinar', linkDataWebinar.titleWebinar)
-        .attach('imageWebinar', linkDataWebinar.imageWebinar, 'testing.jpg')
-        .field('summaryWebinar', linkDataWebinar.summaryWebinar)
+        .field('title', linkDataWebinar.title)
+        .attach('image', linkDataWebinar.image, 'testing.jpg')
+        .field('summary', linkDataWebinar.summary)
         .end((err, res) => {
           if (err) done(err);
 
@@ -186,9 +186,9 @@ describe('Test CRUD link data', () => {
           expect(data).to.have.deep.property('link', linkDataWebinar.link);
           expect(data).to.have.deep.property('publish', linkDataWebinar.publish);
           expect(data).to.have.deep.property('category', linkDataWebinar.category);
-          expect(data).to.have.deep.property('title', linkDataWebinar.titleWebinar);
+          expect(data).to.have.deep.property('title', linkDataWebinar.title);
           expect(data).to.have.property('image').that.is.a('string');
-          expect(data).to.have.deep.property('summary', linkDataWebinar.summaryWebinar);
+          expect(data).to.have.deep.property('summary', linkDataWebinar.summary);
           done();
         });
     });
@@ -216,9 +216,9 @@ describe('Test CRUD link data', () => {
           .field('link', data.link)
           .field('publish', data.publish)
           .field('category', data.category)
-          .field('titleWebinar', data.titleWebinar)
-          .attach('imageWebinar', data.imageWebinar)
-          .field('summaryWebinar', data.summaryWebinar)
+          .field('title', data.title)
+          .attach('image', data.image)
+          .field('summary', data.summary)
           .end((err, res) => {
             if (err) done(err);
             expect(res).to.have.status(400);
@@ -288,9 +288,9 @@ describe('Test CRUD link data', () => {
         .field('link', linkDataWebinarUpdate.link)
         .field('publish', linkDataWebinarUpdate.publish)
         .field('category', linkDataWebinarUpdate.category)
-        .field('titleWebinar', linkDataWebinarUpdate.titleWebinar)
-        .attach('imageWebinar', linkDataWebinarUpdate.imageWebinar, 'testingUpdate.jpg')
-        .field('summaryWebinar', linkDataWebinarUpdate.summaryWebinar)
+        .field('title', linkDataWebinarUpdate.title)
+        .attach('image', linkDataWebinarUpdate.image, 'testingUpdate.jpg')
+        .field('summary', linkDataWebinarUpdate.summary)
         .end((err, res) => {
           if (err) done(err);
 
@@ -304,10 +304,10 @@ describe('Test CRUD link data', () => {
           expect(data).to.have.deep.property('link', linkDataWebinarUpdate.link);
           expect(data).to.have.deep.property('publish', linkDataWebinarUpdate.publish);
           expect(data).to.have.deep.property('category', linkDataWebinarUpdate.category);
-          expect(data).to.have.deep.property('title', linkDataWebinarUpdate.titleWebinar);
+          expect(data).to.have.deep.property('title', linkDataWebinarUpdate.title);
           expect(data).to.have.property('image').that.is.a('string');
           expect(data.image).to.not.equal(pathImgWebinar);
-          expect(data).to.have.deep.property('summary', linkDataWebinarUpdate.summaryWebinar);
+          expect(data).to.have.deep.property('summary', linkDataWebinarUpdate.summary);
           done();
         });
     });
@@ -335,9 +335,9 @@ describe('Test CRUD link data', () => {
           .field('link', data.link)
           .field('publish', data.publish)
           .field('category', data.category)
-          .field('titleWebinar', data.titleWebinar)
-          .attach('imageWebinar', data.imageWebinar)
-          .field('summaryWebinar', data.summaryWebinar)
+          .field('title', data.title)
+          .attach('image', data.image)
+          .field('summary', data.summary)
           .end((err, res) => {
             if (err) done(err);
             expect(res).to.have.status(400);

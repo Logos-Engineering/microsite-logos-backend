@@ -10,8 +10,8 @@ async function postLinkController(req, res, next) {
     link,
     publish,
     category,
-    titleWebinar,
-    summaryWebinar,
+    title,
+    summary,
   } = req.body;
 
   try {
@@ -42,9 +42,9 @@ async function postLinkController(req, res, next) {
 
       // simpan payload data webinar ke tabel webinar
       const webinar = await model.Webinar.create({
-        title: titleWebinar,
+        title,
         image: req.file.path,
-        summary: summaryWebinar,
+        summary,
       });
 
       payload.WebinarId = webinar.id;
@@ -125,8 +125,8 @@ async function putLinkByIdController(req, res, next) {
     link,
     publish,
     category,
-    titleWebinar,
-    summaryWebinar,
+    title,
+    summary,
   } = req.body;
 
   const linkId = req.params.id;
@@ -182,9 +182,9 @@ async function putLinkByIdController(req, res, next) {
         }
       });
 
-      dataWebinar.title = titleWebinar;
+      dataWebinar.title = title;
       dataWebinar.image = req.file.path;
-      dataWebinar.summary = summaryWebinar;
+      dataWebinar.summary = summary;
 
       // perbarui data webinar
       updateWebinar = await dataWebinar.save();

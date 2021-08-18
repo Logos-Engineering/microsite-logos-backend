@@ -22,6 +22,6 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
   storage: imgStorage,
   fileFilter,
-}).single('imageWebinar');
+}).single('image');
 
 module.exports = upload;

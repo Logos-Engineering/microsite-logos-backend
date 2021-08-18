@@ -36,14 +36,14 @@ const linkSchema = [
     .bail()
     .isLength({ min: 2, max: 100 })
     .bail(),
-  check('titleWebinar', 'Webinar title is required and it must be string type which length of string at least 2 characters')
+  check('title', 'Webinar title is required and it must be string type which length of string at least 2 characters')
     .optional({ checkFalsy: true })
     .bail()
     .isString()
     .bail()
     .isLength({ min: 2, max: 300 })
     .bail(),
-  check('summaryWebinar', 'Webinar summary is required and it must be string type which length of string at least 5 characters')
+  check('summary', 'Webinar summary is required and it must be string type which length of string at least 5 characters')
     .optional({ checkFalsy: true })
     .bail()
     .isString()
