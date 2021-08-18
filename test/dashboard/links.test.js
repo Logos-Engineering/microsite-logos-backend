@@ -202,7 +202,7 @@ describe('Test CRUD link data', () => {
             if (err) done(err);
             expect(res).to.have.status(400);
             expect(res.body).to.have.property('error');
-            expect(res.body.error).to.have.property('messages').that.is.an('array');
+            expect(res.body.error).to.have.property('messages').that.is.an('object');
             done();
           });
       });
@@ -321,7 +321,7 @@ describe('Test CRUD link data', () => {
             if (err) done(err);
             expect(res).to.have.status(400);
             expect(res.body).to.have.property('error');
-            expect(res.body.error).to.have.property('messages').that.is.an('array');
+            expect(res.body.error).to.have.property('messages').that.is.an('object');
             done();
           });
       });
