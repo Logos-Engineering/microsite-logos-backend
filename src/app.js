@@ -13,7 +13,7 @@ const app = express();
 
 if (process.env.NODE_ENV !== 'test') {
   // koneksi db
-  (async function () {
+  (async () => {
     try {
       if (process.env.NODE_ENV === 'prod') {
         await model.sequelize.sync();
@@ -30,7 +30,7 @@ if (process.env.NODE_ENV !== 'test') {
     } catch (error) {
       process.stdout(error);
     }
-  }());
+  })();
 }
 
 // Middleware

@@ -13,7 +13,7 @@ function ClientErrors(messages, statusCode = 400) {
 
 function errorHandler(err, req, res, next) {
   if (err.name === 'ClientErrors') {
-    process.stdout.write(`${err.stack}\n`);
+    // process.stdout.write(`${err.stack}\n`);
     res.status(err.statusCode);
     return res.json({
       error: {
@@ -22,7 +22,7 @@ function errorHandler(err, req, res, next) {
     });
   }
 
-  process.stdout.write(`${err.stack}\n`);
+  // process.stdout.write(`${err.stack}\n`);
 
   const statusCode = err.statusCode ? err.statusCode : 500;
   res.status(statusCode);
