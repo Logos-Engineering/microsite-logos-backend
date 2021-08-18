@@ -1,6 +1,6 @@
 const model = require('../models/index');
 
-const getAllLinksPublic = async (req, res, next) => {
+async function getAllLinksPublic(req, res, next) {
   try {
     // dapatkan semua link berdasarkan field publish bernilai true
     const dataLinks = await model.Microsite.findAll({
@@ -30,7 +30,9 @@ const getAllLinksPublic = async (req, res, next) => {
           {
             name: value.name,
             link: value.link,
-            webinar: value.Webinar,
+            ...value.Webinar && { title: value.Webinar.title },
+            ...value.Webinar && { image: value.Webinar.image },
+            ...value.Webinar && { summary: value.Webinar.summary },
           },
         ];
         return map;
@@ -39,8 +41,8 @@ const getAllLinksPublic = async (req, res, next) => {
 
     res.status(200).json({ data: reconstructData });
   } catch (error) {
-    return next(error);
+    next(error);
   }
-};
+}
 
 module.exports = { getAllLinksPublic };
