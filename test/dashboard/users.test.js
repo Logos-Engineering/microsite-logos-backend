@@ -10,9 +10,11 @@ chai.use(chaiHttp);
 const endpoint = '/api/dashboard/users';
 
 describe('Test CRUD data user', () => {
+  let userId;
+
   const validUserPayload = {
     username: 'User 1',
-    password: 'Kjsjsiwwuwiuw',
+    password: 'secret123',
   };
 
   const invalidPayloadUser = [
@@ -29,6 +31,36 @@ describe('Test CRUD data user', () => {
       password: 128282882,
     },
   ];
+
+  const validUserPayloadUpdate = {
+    username: 'User update',
+    oldPassword: 'secret123',
+    newPassword: 'secret123',
+  };
+
+  const invalidUserPayloadUpdate = [
+    {
+      username: 1,
+      oldPassword: 'secret123',
+      newPassword: 'secret123',
+    },
+    {
+      username: 'User update',
+      oldPassword: 12212,
+      newPassword: 'secret123',
+    },
+    {
+      username: 'User update',
+      oldPassword: 'secret123',
+      newPassword: ' ',
+    },
+  ];
+
+  const wrongPasswordUserUpdate = {
+    username: 'User update',
+    oldPassword: 'secret123secret',
+    newPassword: 'inisangatsecret',
+  };
 
   before((done) => {
     model.sequelize.sync({ force: true })
@@ -49,6 +81,7 @@ describe('Test CRUD data user', () => {
           if (err) done(err);
 
           const { data } = res.body;
+          userId = data.id;
 
           expect(res).to.have.status(201);
           expect(res.body).to.have.property('data');
@@ -98,6 +131,53 @@ describe('Test CRUD data user', () => {
           if (err) done(err);
           expect(res).to.have.status(200);
           expect(res.body).to.have.property('data').that.is.an('array');
+          done();
+        });
+    });
+  });
+
+  describe('PUT /api/dashboard/users/:id', () => {
+    it('updates an user with valid payload. It should respond with status 200', (done) => {
+      chai.request(server)
+        .put(`${endpoint}/${userId}`)
+        .send(validUserPayloadUpdate)
+        .end((err, res) => {
+          if (err) done(err);
+          expect(res).to.have.status(200);
+          expect(res.body).to.have.property('data');
+
+          const { data } = res.body;
+
+          expect(data).to.have.property('id', userId).that.is.a('string');
+          expect(data).to.have.property('username', validUserPayloadUpdate.username);
+          done();
+        });
+    });
+
+    invalidUserPayloadUpdate.forEach((payload) => {
+      it('updates an user with invalid payload. It should respond with status 400', (done) => {
+        chai.request(server)
+          .put(`${endpoint}/${userId}`)
+          .send(payload)
+          .end((err, res) => {
+            if (err) done(err);
+            expect(res).to.have.status(400);
+            expect(res.body).to.have.property('error');
+            expect(res.body.error).to.have.property('messages').that.is.an('object');
+            done();
+          });
+      });
+    });
+
+    it('updates an user with wrong old password. It should respod with status 403', (done) => {
+      chai.request(server)
+        .put(`${endpoint}/${userId}`)
+        .send(wrongPasswordUserUpdate)
+        .end((err, res) => {
+          if (err) done(err);
+          expect(res).to.have.status(403);
+          expect(res.body).to.have.property('error');
+          expect(res.body.error).to.have.property('message').that.is.a('string');
           done();
         });
     });
