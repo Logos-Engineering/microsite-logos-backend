@@ -43,7 +43,52 @@ async function getUsersController(req, res, next) {
   }
 }
 
+async function putUserByIdController(req, res, next) {
+  const { username, oldPassword, newPassword } = req.body;
+  const userId = req.params.id;
+
+  try {
+    // TODO: check user menggunakan id
+    const user = await model.User.findOne({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!user) {
+      const error = new Error('User is not found');
+      error.statusCode = 404;
+      throw error;
+    }
+
+    // TODO: check oldPassword apakah sama dengan password di DB
+    const resultVerifyPass = user.verifyPassword(oldPassword);
+
+    if (!resultVerifyPass) {
+      const error = new Error('Password is wrong');
+      error.statusCode = 403;
+      throw error;
+    }
+
+    // TODO: update user
+    user.username = username;
+    user.password = newPassword;
+    const userDataUpdated = await user.save();
+
+    res.status(200);
+    res.json({
+      data: {
+        id: userDataUpdated.id,
+        username: userDataUpdated.username,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   postUserController,
   getUsersController,
+  putUserByIdController,
 };
