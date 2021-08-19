@@ -48,7 +48,7 @@ const linkSchema = [
 ];
 
 // skema untuk data user
-const userSchema = [
+const postUserSchema = [
   check('username', 'Username is required and it must be string type which length of string at least 5 characters')
     .exists({ checkFalsy: true, checkNull: true })
     .bail()
@@ -61,4 +61,21 @@ const userSchema = [
     .isString(),
 ];
 
-module.exports = { linkSchema, userSchema };
+const putUserSchema = [
+  check('username', 'Username is required and it must be string type which length of string at least 5 characters')
+    .exists({ checkFalsy: true, checkNull: true })
+    .bail()
+    .isString()
+    .bail()
+    .isLength({ min: 5, max: 20 }),
+  check('oldPassword', 'Minimum length of password is 8')
+    .isLength({ min: 8 })
+    .bail()
+    .isString(),
+  check('newPassword', 'Minimum length of password is 8')
+    .isLength({ min: 8 })
+    .bail()
+    .isString(),
+];
+
+module.exports = { linkSchema, postUserSchema, putUserSchema };

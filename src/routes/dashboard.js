@@ -5,10 +5,12 @@ const {
   postLinkController, getAllLinksController, putLinkByIdController, deleteLinkByIdController,
 } = require('../controllers/links.controller');
 
-const { postUserController } = require('../controllers/users.controller');
+const {
+  postUserController, putUserByIdController,
+} = require('../controllers/users.controller');
 
 // validator
-const { linkSchema, userSchema } = require('../middlewares/validator/schema');
+const { linkSchema, postUserSchema, putUserSchema } = require('../middlewares/validator/schema');
 const { validator } = require('../middlewares/validator/index');
 
 // /api/dashboard/links
@@ -18,6 +20,7 @@ router.put('/links/:id', linkSchema, validator, putLinkByIdController);
 router.delete('/links/:id', deleteLinkByIdController);
 
 // /api/dashboard/users
-router.post('/users', userSchema, validator, postUserController);
+router.post('/users', postUserSchema, validator, postUserController);
+router.put('/users/:id', putUserSchema, validator, putUserByIdController);
 
 module.exports = router;
