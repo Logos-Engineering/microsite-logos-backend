@@ -5,7 +5,7 @@ const {
   postLinkController, getAllLinksController, putLinkByIdController, deleteLinkByIdController,
 } = require('../controllers/links.controller');
 
-const { postUserController } = require('../controllers/users.controller');
+const { postUserController, getUsersController } = require('../controllers/users.controller');
 
 // validator
 const { linkSchema, userSchema } = require('../middlewares/validator/schema');
@@ -19,5 +19,6 @@ router.delete('/links/:id', deleteLinkByIdController);
 
 // /api/dashboard/users
 router.post('/users', userSchema, validator, postUserController);
+router.get('/users', getUsersController);
 
 module.exports = router;

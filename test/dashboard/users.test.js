@@ -89,4 +89,17 @@ describe('Test CRUD data user', () => {
         });
     });
   });
+
+  describe('GET /api/dashboard/users', () => {
+    it('should get all users and respond with status 200', (done) => {
+      chai.request(server)
+        .get(endpoint)
+        .end((err, res) => {
+          if (err) done(err);
+          expect(res).to.have.status(200);
+          expect(res.body).to.have.property('data').that.is.an('array');
+          done();
+        });
+    });
+  });
 });
