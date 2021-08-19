@@ -6,7 +6,7 @@ const {
 } = require('../controllers/links.controller');
 
 const {
-  postUserController, putUserByIdController,
+  postUserController, putUserByIdController, getUsersController,
 } = require('../controllers/users.controller');
 
 // validator
@@ -22,5 +22,6 @@ router.delete('/links/:id', deleteLinkByIdController);
 // /api/dashboard/users
 router.post('/users', postUserSchema, validator, postUserController);
 router.put('/users/:id', putUserSchema, validator, putUserByIdController);
+router.get('/users', getUsersController);
 
 module.exports = router;

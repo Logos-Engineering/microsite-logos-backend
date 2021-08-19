@@ -73,7 +73,22 @@ async function putUserByIdController(req, res, next) {
   }
 }
 
+async function getUsersController(req, res, next) {
+  try {
+    const users = await model.User.findAll({
+      attributes: ['id', 'username'],
+    });
+    res.status(200);
+    res.json({
+      data: users,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   postUserController,
   putUserByIdController,
+  getUsersController,
 };
