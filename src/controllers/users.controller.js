@@ -36,9 +36,7 @@ async function getUsersController(req, res, next) {
     });
     res.status(200);
     res.json({
-      data: {
-        users,
-      },
+      data: users,
     });
   } catch (error) {
     next(error);
