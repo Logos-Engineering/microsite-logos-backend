@@ -1,5 +1,5 @@
-module.exports = function (sequelizeInstance, Sequelize) {
-  return sequelizeInstance.define('Category', {
+module.exports = (sequelize, Sequelize) => (
+  sequelize.define('Category', {
     id: {
       type: Sequelize.UUID,
       defaultValue: Sequelize.UUIDV4,
@@ -9,5 +9,5 @@ module.exports = function (sequelizeInstance, Sequelize) {
       type: Sequelize.STRING,
       allowNull: false,
     },
-  });
-};
+  })
+);

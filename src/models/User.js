@@ -1,7 +1,7 @@
 const { generateSalt, encryptPassword } = require('../utils/index');
 
-module.exports = function (sequelizeInstance, Sequelize) {
-  const User = sequelizeInstance.define('user', {
+module.exports = function (sequelize, Sequelize) {
+  const User = sequelize.define('user', {
     id: {
       type: Sequelize.UUID,
       defaultValue: Sequelize.UUIDV4,
