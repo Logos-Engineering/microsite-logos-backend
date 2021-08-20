@@ -20,7 +20,6 @@ if (process.env.NODE_ENV !== 'test') {
       } else {
         await model.sequelize.sync({ force: true });
       }
-      await model.sequelize.authenticate();
       process.stdout.write(`Connection has been established successfully.\n`);
 
       await model.User.create({

@@ -1,7 +1,7 @@
-const Sequelize = require('sequelize');
+const { Sequelize } = require('sequelize');
 const dbConfig = require('../config/db.config');
 
-const sequelizeInstance = new Sequelize(
+const sequelize = new Sequelize(
   dbConfig.DB,
   dbConfig.USER,
   dbConfig.PASSWORD,
@@ -24,13 +24,13 @@ const sequelizeInstance = new Sequelize(
 
 const model = {
   Sequelize,
-  sequelize: sequelizeInstance,
+  sequelize,
 };
 
-model.Microsite = require('./Microsite')(sequelizeInstance, Sequelize);
-model.Category = require('./Category')(sequelizeInstance, Sequelize);
-model.Webinar = require('./Webinar')(sequelizeInstance, Sequelize);
-model.User = require('./User')(sequelizeInstance, Sequelize);
+model.Microsite = require('./Microsite')(sequelize, Sequelize);
+model.Category = require('./Category')(sequelize, Sequelize);
+model.Webinar = require('./Webinar')(sequelize, Sequelize);
+model.User = require('./User')(sequelize, Sequelize);
 
 model.Category.hasMany(model.Microsite);
 model.Microsite.belongsTo(model.Category);
