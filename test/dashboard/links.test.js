@@ -30,7 +30,7 @@ describe('Test CRUD link data', () => {
     publish: false,
     category: 'webinar',
     title: 'Webinar 1',
-    image: fs.readFileSync(`${process.cwd()}/testing.jpg`),
+    image: fs.readFileSync(`${process.cwd()}/test/helper/testing.jpg`),
     summary: 'jwiwjijwiiw',
   };
 
@@ -47,7 +47,7 @@ describe('Test CRUD link data', () => {
     publish: true,
     category: 'webinar',
     title: 'Webinar Update',
-    image: fs.readFileSync(`${process.cwd()}/testing.jpg`),
+    image: fs.readFileSync(`${process.cwd()}/test/helper/testing.jpg`),
     summary: 'jwiwjijwiiw',
   };
 
@@ -95,7 +95,7 @@ describe('Test CRUD link data', () => {
       publish: true,
       category: 'webinar',
       title: 'webinar 1',
-      image: fs.readFileSync(`${process.cwd()}/testing.jpg`),
+      image: fs.readFileSync(`${process.cwd()}/test/helper/testing.jpg`),
       summary: 1222,
     },
     {
@@ -104,7 +104,7 @@ describe('Test CRUD link data', () => {
       publish: true,
       category: 'webinar',
       title: 'webinar 1',
-      image: fs.readFileSync(`${process.cwd()}/testing.svg`),
+      image: fs.readFileSync(`${process.cwd()}/test/helper/testing.svg`),
       summary: 'ini testing',
     },
     {
