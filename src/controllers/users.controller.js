@@ -87,8 +87,30 @@ async function putUserByIdController(req, res, next) {
   }
 }
 
+async function deleteUserByIdController(req, res, next) {
+  const { id: userId } = req.params;
+  try {
+    const result = await model.User.destroy({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!result) {
+      const error = new Error('User is not found');
+      error.statusCode = 404;
+      throw error;
+    }
+
+    res.json({ message: 'Success deleted user' });
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   postUserController,
   getUsersController,
   putUserByIdController,
+  deleteUserByIdController,
 };
