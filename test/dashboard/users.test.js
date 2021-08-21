@@ -182,4 +182,30 @@ describe('Test CRUD data user', () => {
         });
     });
   });
+
+  describe('DELETE /api/dashboard/users/:id', () => {
+    it('delete user. It should respond with status 200', (done) => {
+      chai.request(server)
+        .delete(`${endpoint}/${userId}`)
+        .end((err, res) => {
+          if (err) done(err);
+
+          expect(res).to.have.status(200);
+          expect(res.body).to.have.property('message', 'Success deleted user');
+          done();
+        });
+    });
+
+    it('deletes a user whose id doesnt exist. It should respond with status 404', (done) => {
+      chai.request(server)
+        .delete(`${endpoint}/${userId}`)
+        .end((err, res) => {
+          if (err) done(err);
+
+          expect(res).to.have.status(404);
+          expect(res.body.error).to.have.property('message', 'User is not found');
+          done();
+        });
+    });
+  });
 });
