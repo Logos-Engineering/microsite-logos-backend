@@ -6,7 +6,7 @@ const {
 } = require('../controllers/links.controller');
 
 const {
-  postUserController, putUserByIdController, getUsersController,
+  postUserController, putUserByIdController, getUsersController, deleteUserByIdController
 } = require('../controllers/users.controller');
 
 // validator
@@ -23,5 +23,6 @@ router.delete('/links/:id', deleteLinkByIdController);
 router.post('/users', postUserSchema, validator, postUserController);
 router.put('/users/:id', putUserSchema, validator, putUserByIdController);
 router.get('/users', getUsersController);
+router.delete('/users/:id', deleteUserByIdController);
 
 module.exports = router;
