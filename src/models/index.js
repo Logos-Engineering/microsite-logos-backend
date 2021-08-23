@@ -31,6 +31,7 @@ model.Microsite = require('./Microsite')(sequelize, Sequelize);
 model.Category = require('./Category')(sequelize, Sequelize);
 model.Webinar = require('./Webinar')(sequelize, Sequelize);
 model.User = require('./User')(sequelize, Sequelize);
+model.Authentication = require('./Authentications')(sequelize, Sequelize);
 
 model.Category.hasMany(model.Microsite);
 model.Microsite.belongsTo(model.Category);

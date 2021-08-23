@@ -78,4 +78,39 @@ const putUserSchema = [
     .isString(),
 ];
 
-module.exports = { linkSchema, postUserSchema, putUserSchema };
+// Skema untuk auth
+const postAuthSchema = [
+  check('username', 'Username is required and it must be string type which length of string at least 5 characters')
+    .exists({ checkFalsy: true, checkNull: true })
+    .bail()
+    .isString()
+    .bail()
+    .isLength({ min: 5, max: 20 }),
+  check('password', 'Minimum length of password is 8')
+    .isLength({ min: 8 })
+    .bail()
+    .isString(),
+];
+
+const putAuthSchema = [
+  check('refreshToken', 'Refresh token is required and string type')
+    .exists({ checkFalsy: true, checkNull: true })
+    .bail()
+    .isString(),
+];
+
+const deleteAuthSchema = [
+  check('refreshToken', 'Refresh token is required and string type')
+    .exists({ checkFalsy: true, checkNull: true })
+    .bail()
+    .isString(),
+];
+
+module.exports = {
+  linkSchema,
+  postUserSchema,
+  putUserSchema,
+  postAuthSchema,
+  putAuthSchema,
+  deleteAuthSchema,
+};

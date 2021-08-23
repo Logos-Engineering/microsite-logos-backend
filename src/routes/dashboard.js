@@ -6,7 +6,7 @@ const {
 } = require('../controllers/links.controller');
 
 const {
-  postUserController, putUserByIdController, getUsersController, deleteUserByIdController
+  postUserController, putUserByIdController, getUsersController, deleteUserByIdController,
 } = require('../controllers/users.controller');
 
 // validator

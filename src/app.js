@@ -24,7 +24,7 @@ if (process.env.NODE_ENV !== 'test') {
 
       await model.User.create({
         username: 'user test',
-        password: 'slslwww',
+        password: 'Slslwww8s7s8ss',
       });
     } catch (error) {
       process.stdout(error);
