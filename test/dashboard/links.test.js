@@ -12,127 +12,156 @@ chai.use(chaiHttp);
 
 const endpoint = '/api/dashboard/links';
 
-describe('Test CRUD link data', () => {
-  let idLinkData;
-  let idLinkDataWebinar;
-  let pathImgWebinar;
+let accToken;
+let refToken;
+let idLinkData;
+let idLinkDataWebinar;
+let pathImgWebinar;
 
-  const linkdata = {
-    name: 'link 1',
+const user = {
+  username: 'user test',
+  password: 'Slslwww8s7s8ss',
+};
+
+const linkdata = {
+  name: 'link 1',
+  link: 'https://url1.com',
+  publish: true,
+  category: 'donasi',
+};
+
+const linkDataWebinar = {
+  name: 'link webinar',
+  link: 'https://sksks.com/shushush',
+  publish: false,
+  category: 'webinar',
+  title: 'Webinar 1',
+  image: fs.readFileSync(`${process.cwd()}/test/helper/testing.jpg`),
+  summary: 'jwiwjijwiiw',
+};
+
+const linkDataUpdate = {
+  name: 'link data update',
+  link: 'https://url1.com',
+  publish: false,
+  category: 'partnership',
+};
+
+const linkDataWebinarUpdate = {
+  name: 'link update',
+  link: 'https://sksks.com/shushush',
+  publish: true,
+  category: 'webinar',
+  title: 'Webinar Update',
+  image: fs.readFileSync(`${process.cwd()}/test/helper/testing.jpg`),
+  summary: 'jwiwjijwiiw',
+};
+
+const invalidLinkData = [
+  {
+    name: 121,
     link: 'https://url1.com',
     publish: true,
     category: 'donasi',
-  };
-
-  const linkDataWebinar = {
-    name: 'link webinar',
-    link: 'https://sksks.com/shushush',
-    publish: false,
-    category: 'webinar',
-    title: 'Webinar 1',
-    image: fs.readFileSync(`${process.cwd()}/test/helper/testing.jpg`),
-    summary: 'jwiwjijwiiw',
-  };
-
-  const linkDataUpdate = {
-    name: 'link data update',
+  },
+  {
     link: 'https://url1.com',
-    publish: false,
-    category: 'partnership',
-  };
+    publish: true,
+    category: 'donasi',
+  },
+  {
+    name: 'link 1',
+    link: 'url1.com',
+    publish: true,
+    category: 'donasi',
+  },
+  {
+    name: 'link 1',
+    link: 'https://url1.com',
+    publish: 'truefalsed',
+    category: 'donasi',
+  },
+  {
+    name: 'link 1',
+    link: 'https://url1.com',
+    publish: true,
+  },
+  {
+    name: 'link 1',
+    link: 'https://url1.com',
+    publish: true,
+    category: true,
+  },
+];
 
-  const linkDataWebinarUpdate = {
-    name: 'link update',
-    link: 'https://sksks.com/shushush',
+const invalidLinkDataWebinar = [
+  {
+    name: 121,
+    link: 'https://url1.com',
     publish: true,
     category: 'webinar',
-    title: 'Webinar Update',
+    title: 'webinar 1',
     image: fs.readFileSync(`${process.cwd()}/test/helper/testing.jpg`),
-    summary: 'jwiwjijwiiw',
-  };
+    summary: 1222,
+  },
+  {
+    name: 'link 2',
+    link: 'https://url1.com',
+    publish: true,
+    category: 'webinar',
+    title: 'webinar 1',
+    image: fs.readFileSync(`${process.cwd()}/test/helper/testing.svg`),
+    summary: 'ini testing',
+  },
+  {
+    name: 'link 3',
+    link: 'https://url1.com',
+    publish: true,
+    category: 'webinar',
+    title: '',
+    image: '',
+    summary: 'ini testing',
+  },
+  {
+    name: 'link 4',
+    link: 'https://url1.com',
+    publish: true,
+    category: 'webinar',
+    title: 'webinar 1',
+    summary: 'ini testing',
+  },
+];
 
-  const invalidLinkData = [
-    {
-      name: 121,
-      link: 'https://url1.com',
-      publish: true,
-      category: 'donasi',
-    },
-    {
-      link: 'https://url1.com',
-      publish: true,
-      category: 'donasi',
-    },
-    {
-      name: 'link 1',
-      link: 'url1.com',
-      publish: true,
-      category: 'donasi',
-    },
-    {
-      name: 'link 1',
-      link: 'https://url1.com',
-      publish: 'truefalsed',
-      category: 'donasi',
-    },
-    {
-      name: 'link 1',
-      link: 'https://url1.com',
-      publish: true,
-    },
-    {
-      name: 'link 1',
-      link: 'https://url1.com',
-      publish: true,
-      category: true,
-    },
-  ];
-
-  const invalidLinkDataWebinar = [
-    {
-      name: 121,
-      link: 'https://url1.com',
-      publish: true,
-      category: 'webinar',
-      title: 'webinar 1',
-      image: fs.readFileSync(`${process.cwd()}/test/helper/testing.jpg`),
-      summary: 1222,
-    },
-    {
-      name: 'link 2',
-      link: 'https://url1.com',
-      publish: true,
-      category: 'webinar',
-      title: 'webinar 1',
-      image: fs.readFileSync(`${process.cwd()}/test/helper/testing.svg`),
-      summary: 'ini testing',
-    },
-    {
-      name: 'link 3',
-      link: 'https://url1.com',
-      publish: true,
-      category: 'webinar',
-      title: '',
-      image: '',
-      summary: 'ini testing',
-    },
-    {
-      name: 'link 4',
-      link: 'https://url1.com',
-      publish: true,
-      category: 'webinar',
-      title: 'webinar 1',
-      summary: 'ini testing',
-    },
-  ];
-
+describe('Testing CRUD for link data', () => {
   before((done) => {
     model.sequelize.sync({ force: true })
       .then(() => {
         process.stdout.write(`Connection has been established successfully.\n`);
-        done();
+        return model.User.create(user);
+      }).then(() => {
+        chai.request(server)
+          .post('/api/auth')
+          .send(user)
+          .end((err, res) => {
+            if (err) done(err);
+            const { accessToken, refreshToken } = res.body.data;
+            accToken = accessToken;
+            refToken = refreshToken;
+            done();
+          });
       }).catch((error) => {
         done(error);
+      });
+  });
+
+  beforeEach((done) => {
+    chai.request(server)
+      .put('/api/auth')
+      .send({ refreshToken: refToken })
+      .end((err, res) => {
+        if (err) done(err);
+        accToken = res.body.data.accessToken;
+        done();
       });
   });
 
@@ -140,6 +169,7 @@ describe('Test CRUD link data', () => {
     it('adds valid link data. It should return status 201 and data property with the correct value', (done) => {
       chai.request(server)
         .post(endpoint)
+        .set('Authorization', `Bearer ${accToken}`)
         .send(linkdata)
         .end((err, res) => {
           if (err) done(err);
@@ -163,6 +193,7 @@ describe('Test CRUD link data', () => {
     it('adds valid webinar link data. It should return status 201 and data property with the correct value', (done) => {
       chai.request(server)
         .post(endpoint)
+        .set('Authorization', `Bearer ${accToken}`)
         .field('name', linkDataWebinar.name)
         .field('link', linkDataWebinar.link)
         .field('publish', linkDataWebinar.publish)
@@ -176,6 +207,7 @@ describe('Test CRUD link data', () => {
           const { data } = res.body;
           idLinkDataWebinar = data.id;
           pathImgWebinar = data.image;
+          console.log(pathImgWebinar);
 
           expect(res).to.have.status(201);
           expect(res.body).to.have.property('data');
@@ -197,6 +229,7 @@ describe('Test CRUD link data', () => {
       it('adds invalid link data. It should return status 400 and messages property with the correct value', (done) => {
         chai.request(server)
           .post(endpoint)
+          .set('Authorization', `Bearer ${accToken}`)
           .send(data)
           .end((err, res) => {
             if (err) done(err);
@@ -212,6 +245,7 @@ describe('Test CRUD link data', () => {
       it('adds invalid webinar link data. It should return status 400 and messages/message property with the correct value', (done) => {
         chai.request(server)
           .post(endpoint)
+          .set('Authorization', `Bearer ${accToken}`)
           .field('name', data.name)
           .field('link', data.link)
           .field('publish', data.publish)
@@ -231,6 +265,7 @@ describe('Test CRUD link data', () => {
     it('adds invalid (with few missing fields) webinar link data. It should return status 400 and messages/message property with the correct value', (done) => {
       chai.request(server)
         .post(endpoint)
+        .set('Authorization', `Bearer ${accToken}`)
         .field('name', 'hsuhuhush')
         .field('link', 'https://swskow.com')
         .field('publish', true)
@@ -248,6 +283,7 @@ describe('Test CRUD link data', () => {
     it('gets all links. It should respond with status 200 and also have data property which type is an array', (done) => {
       chai.request(server)
         .get(endpoint)
+        .set('Authorization', `Bearer ${accToken}`)
         .end((err, res) => {
           if (err) done(err);
 
@@ -259,10 +295,24 @@ describe('Test CRUD link data', () => {
     });
   });
 
+  describe('GET /:file', () => {
+    it('respond valid image', (done) => {
+      chai.request(server)
+        .get(`/${pathImgWebinar}`)
+        .end((err, res) => {
+          if (err) done(err);
+          expect(res).to.have.status(200);
+          expect(res).to.have.header('Content-Type', 'image/jpeg');
+          done();
+        });
+    });
+  });
+
   describe('PUT /api/dashboard/links/:id', () => {
     it('updates valid link data. It should respond with status 200 and have data property with correct value', (done) => {
       chai.request(server)
         .put(`${endpoint}/${idLinkData}`)
+        .set('Authorization', `Bearer ${accToken}`)
         .send(linkDataUpdate)
         .end((err, res) => {
           if (err) done(err);
@@ -284,6 +334,7 @@ describe('Test CRUD link data', () => {
     it('updates valid webinar link data. It should respond with status 200 and have data property with correct value', (done) => {
       chai.request(server)
         .put(`${endpoint}/${idLinkDataWebinar}`)
+        .set('Authorization', `Bearer ${accToken}`)
         .field('name', linkDataWebinarUpdate.name)
         .field('link', linkDataWebinarUpdate.link)
         .field('publish', linkDataWebinarUpdate.publish)
@@ -316,6 +367,7 @@ describe('Test CRUD link data', () => {
       it('updates invalid link data. It should respond with status 400 value and also have messages property', (done) => {
         chai.request(server)
           .put(`${endpoint}/${idLinkData}`)
+          .set('Authorization', `Bearer ${accToken}`)
           .send(data)
           .end((err, res) => {
             if (err) done(err);
@@ -331,6 +383,7 @@ describe('Test CRUD link data', () => {
       it('updates invalid webinar link data. It should respond with status value 400 and have error property', (done) => {
         chai.request(server)
           .put(`${endpoint}/${idLinkDataWebinar}`)
+          .set('Authorization', `Bearer ${accToken}`)
           .field('name', data.name)
           .field('link', data.link)
           .field('publish', data.publish)
@@ -350,6 +403,7 @@ describe('Test CRUD link data', () => {
     it('updates invalid (with few missing fields) webinar link data. It should respond with status value 400 and have error property', (done) => {
       chai.request(server)
         .put(`${endpoint}/${idLinkDataWebinar}`)
+        .set('Authorization', `Bearer ${accToken}`)
         .field('name', 'hsuhuhush')
         .field('link', 'https://swskow.com')
         .field('publish', true)
@@ -367,6 +421,7 @@ describe('Test CRUD link data', () => {
     it('deletes link data. It should respond with status 200 and message property', (done) => {
       chai.request(server)
         .delete(`${endpoint}/${idLinkData}`)
+        .set('Authorization', `Bearer ${accToken}`)
         .end((err, res) => {
           if (err) done(err);
 
@@ -379,6 +434,7 @@ describe('Test CRUD link data', () => {
     it('deletes webinar link data. It should respond with status 200 and message property', (done) => {
       chai.request(server)
         .delete(`${endpoint}/${idLinkDataWebinar}`)
+        .set('Authorization', `Bearer ${accToken}`)
         .end((err, res) => {
           if (err) done(err);
 
@@ -391,6 +447,7 @@ describe('Test CRUD link data', () => {
     it('ensures that the data have been deleted', (done) => {
       chai.request(server)
         .get(endpoint)
+        .set('Authorization', `Bearer ${accToken}`)
         .end((err, res) => {
           if (err) done(err);
 
@@ -404,6 +461,7 @@ describe('Test CRUD link data', () => {
     it('deletes link data using an invalid id. It should respond with status 404', (done) => {
       chai.request(server)
         .delete(`${endpoint}/${idLinkData}`)
+        .set('Authorization', `Bearer ${accToken}`)
         .end((err, res) => {
           if (err) done(err);
 
@@ -416,6 +474,7 @@ describe('Test CRUD link data', () => {
     it('deletes webinar link data using an invalid id. It should respond with status 404', (done) => {
       chai.request(server)
         .delete(`${endpoint}/${idLinkDataWebinar}`)
+        .set('Authorization', `Bearer ${accToken}`)
         .end((err, res) => {
           if (err) done(err);
 
@@ -428,6 +487,7 @@ describe('Test CRUD link data', () => {
     it('deletes link data using an invalid id (boolean). It should respond with status 404', (done) => {
       chai.request(server)
         .delete(`${endpoint}/true`)
+        .set('Authorization', `Bearer ${accToken}`)
         .end((err, res) => {
           if (err) done(err);
 

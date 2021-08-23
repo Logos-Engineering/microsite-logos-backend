@@ -9,59 +9,59 @@ chai.use(chaiHttp);
 
 const endpoint = '/api/dashboard/users';
 
-describe('Test CRUD data user', () => {
-  let userId;
+let userId;
 
-  const validUserPayload = {
-    username: 'User 1',
-    password: 'secret123',
-  };
+const validUserPayload = {
+  username: 'User 1',
+  password: 'secret123',
+};
 
-  const invalidPayloadUser = [
-    {
-      username: 1,
-      password: 'KSKSKSKSKSKSK',
-    },
-    {
-      username: 'Valid username',
-      password: '1',
-    },
-    {
-      username: 'Valid username',
-      password: 128282882,
-    },
-  ];
+const invalidPayloadUser = [
+  {
+    username: 1,
+    password: 'KSKSKSKSKSKSK',
+  },
+  {
+    username: 'Valid username',
+    password: '1',
+  },
+  {
+    username: 'Valid username',
+    password: 128282882,
+  },
+];
 
-  const validUserPayloadUpdate = {
-    username: 'User update',
+const validUserPayloadUpdate = {
+  username: 'User update',
+  oldPassword: 'secret123',
+  newPassword: 'secret123',
+};
+
+const invalidUserPayloadUpdate = [
+  {
+    username: 1,
     oldPassword: 'secret123',
     newPassword: 'secret123',
-  };
-
-  const invalidUserPayloadUpdate = [
-    {
-      username: 1,
-      oldPassword: 'secret123',
-      newPassword: 'secret123',
-    },
-    {
-      username: 'User update',
-      oldPassword: 12212,
-      newPassword: 'secret123',
-    },
-    {
-      username: 'User update',
-      oldPassword: 'secret123',
-      newPassword: ' ',
-    },
-  ];
-
-  const wrongPasswordUserUpdate = {
+  },
+  {
     username: 'User update',
-    oldPassword: 'secret123secret',
-    newPassword: 'inisangatsecret',
-  };
+    oldPassword: 12212,
+    newPassword: 'secret123',
+  },
+  {
+    username: 'User update',
+    oldPassword: 'secret123',
+    newPassword: ' ',
+  },
+];
 
+const wrongPasswordUserUpdate = {
+  username: 'User update',
+  oldPassword: 'secret123secret',
+  newPassword: 'inisangatsecret',
+};
+
+describe('Testing CRUD for data user', () => {
   before((done) => {
     model.sequelize.sync({ force: true })
       .then(() => {
