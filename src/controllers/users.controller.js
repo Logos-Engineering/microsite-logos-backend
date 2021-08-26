@@ -1,8 +1,8 @@
 const model = require('../models/index');
 
 async function postUserController(req, res, next) {
-  const { username, password, role = 'admin' } = req.body;
-
+  let { username, password, role = 'admin' } = req.body;
+  role = 'admin';
   try {
     // periksa username, apakah sudah digunakan?
     const checkUsername = await model.User.findOne({
