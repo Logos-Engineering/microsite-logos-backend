@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const model = require('../models/index');
 const { verifyRefToken } = require('../utils/index');
 
+// controller untuk login user
 async function postAuthController(req, res, next) {
   const { username, password } = req.body;
 
@@ -49,6 +50,7 @@ async function postAuthController(req, res, next) {
   }
 }
 
+// controller untuk memperbarui access token
 async function putAuthController(req, res, next) {
   const { refreshToken } = req.body;
 
@@ -70,6 +72,7 @@ async function putAuthController(req, res, next) {
   }
 }
 
+// controller untuk logout
 async function deleteAuthController(req, res, next) {
   try {
     const { refreshToken } = req.body;

@@ -1,6 +1,7 @@
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
+// membuat garam untuk campuran password
 function generateSalt() {
   return crypto.randomBytes(16).toString('base64');
 }
@@ -13,7 +14,9 @@ function encryptPassword(plainTextPass, salt) {
     .digest('hex');
 }
 
+// untuk memverifikasi refresh token yang dikirim
 async function verifyRefToken(model, refreshToken) {
+  // periksa refresh token di dlm DB
   const checkRefTokenInDB = await model.Authentication.findOne({
     where: {
       refreshToken,
@@ -26,6 +29,7 @@ async function verifyRefToken(model, refreshToken) {
     throw error;
   }
 
+  // verifikasi refresh token berdasarkan key
   return jwt.verify(
     refreshToken,
     process.env.REFRESH_TOKEN_KEY,
@@ -37,6 +41,7 @@ async function verifyRefToken(model, refreshToken) {
           throw error;
         }
         const error = new Error('Refresh token has Expired');
+        // jika refresh token expired maka refresh token yang di DB dihapus
         await model.Authentication.destroy({
           where: {
             refreshToken,
@@ -46,6 +51,7 @@ async function verifyRefToken(model, refreshToken) {
         throw error;
       }
 
+      // verifikasi user
       const user = await model.User.findByPk(decode.id);
 
       if (!user) {

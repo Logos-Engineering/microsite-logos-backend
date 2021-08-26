@@ -61,7 +61,7 @@ const wrongPasswordUserUpdate = {
   newPassword: 'inisangatsecret',
 };
 
-describe('Testing CRUD for data user', () => {
+describe('Testing CRUD for user data', () => {
   before((done) => {
     model.sequelize.sync({ force: true })
       .then(() => {

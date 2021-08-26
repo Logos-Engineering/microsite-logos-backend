@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 
 const model = require('../models/index');
 
+// fungsi untuk verifikasi access token
 async function verifyAccToken(req, res, next) {
   const headerAuth = req.headers.authorization;
 
@@ -17,6 +18,7 @@ async function verifyAccToken(req, res, next) {
         throw error;
       }
 
+      // titik verifikasi access token
       await jwt.verify(token, process.env.ACCESS_TOKEN_KEY, async (err, decode) => {
         if (err) {
           if (err.name !== 'TokenExpiredError') {
@@ -29,6 +31,7 @@ async function verifyAccToken(req, res, next) {
           throw error;
         }
 
+        // verifikasi user
         const user = await model.User.findByPk(decode.id);
 
         if (!user) {
@@ -36,7 +39,7 @@ async function verifyAccToken(req, res, next) {
           error.statusCode = 401;
           throw error;
         }
-
+        // kembalikan data user
         req.user = user;
         next();
       });
