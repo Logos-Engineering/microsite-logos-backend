@@ -1,7 +1,7 @@
 const model = require('../models/index');
 
 async function postUserController(req, res, next) {
-  const { username, password } = req.body;
+  const { username, password, role = 'admin' } = req.body;
 
   try {
     // periksa username, apakah sudah digunakan?
@@ -18,12 +18,13 @@ async function postUserController(req, res, next) {
     }
 
     // simpan data user ke DB
-    const { id } = await model.User.create({ username, password });
+    const { id } = await model.User.create({ username, password, role });
     res.status(201);
     res.json({
       data: {
         id,
         username,
+        role,
       },
     });
   } catch (error) {
@@ -35,7 +36,7 @@ async function getUsersController(req, res, next) {
   try {
     // dapatkan semua data user kembalikan properti id dan username nya saja
     const users = await model.User.findAll({
-      attributes: ['id', 'username'],
+      attributes: ['id', 'username', 'role'],
     });
     res.status(200);
     res.json({
@@ -83,6 +84,7 @@ async function putUserByIdController(req, res, next) {
       data: {
         id: userDataUpdated.id,
         username: userDataUpdated.username,
+        role: userDataUpdated.role,
       },
     });
   } catch (error) {

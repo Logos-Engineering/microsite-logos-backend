@@ -26,11 +26,17 @@ async function postAuthController(req, res, next) {
       throw error;
     }
 
-    const generateAccessToken = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN_KEY, {
+    const generateAccessToken = jwt.sign({
+      id: user.id,
+      role: user.role,
+    }, process.env.ACCESS_TOKEN_KEY, {
       expiresIn: process.env.JWT_ACC_TOKEN_EXP,
     });
 
-    const generateRefreshToken = jwt.sign({ id: user.id }, process.env.REFRESH_TOKEN_KEY, {
+    const generateRefreshToken = jwt.sign({
+      id: user.id,
+      role: user.role,
+    }, process.env.REFRESH_TOKEN_KEY, {
       expiresIn: process.env.JWT_REF_TOKEN_EXP,
     });
 
