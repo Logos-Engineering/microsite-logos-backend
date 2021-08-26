@@ -4,6 +4,7 @@ async function postUserController(req, res, next) {
   const { username, password } = req.body;
 
   try {
+    // periksa username, apakah sudah digunakan?
     const checkUsername = await model.User.findOne({
       where: {
         username,
@@ -16,6 +17,7 @@ async function postUserController(req, res, next) {
       throw error;
     }
 
+    // simpan data user ke DB
     const { id } = await model.User.create({ username, password });
     res.status(201);
     res.json({
@@ -31,6 +33,7 @@ async function postUserController(req, res, next) {
 
 async function getUsersController(req, res, next) {
   try {
+    // dapatkan semua data user kembalikan properti id dan username nya saja
     const users = await model.User.findAll({
       attributes: ['id', 'username'],
     });
@@ -48,7 +51,7 @@ async function putUserByIdController(req, res, next) {
   const userId = req.params.id;
 
   try {
-    // TODO: check user menggunakan id
+    // periksa data user berdasarkan id
     const user = await model.User.findOne({
       where: {
         id: userId,
@@ -61,7 +64,7 @@ async function putUserByIdController(req, res, next) {
       throw error;
     }
 
-    // TODO: check oldPassword apakah sama dengan password di DB
+    // verifikasi password
     const resultVerifyPass = user.verifyPassword(oldPassword);
 
     if (!resultVerifyPass) {
@@ -70,7 +73,7 @@ async function putUserByIdController(req, res, next) {
       throw error;
     }
 
-    // TODO: update user
+    // perbarui data user
     user.username = username;
     user.password = newPassword;
     const userDataUpdated = await user.save();
@@ -90,12 +93,14 @@ async function putUserByIdController(req, res, next) {
 async function deleteUserByIdController(req, res, next) {
   const { id: userId } = req.params;
   try {
+    // hapus data user berdasarkan id
     const result = await model.User.destroy({
       where: {
         id: userId,
       },
     });
 
+    // jika data user tdk ada maka kembalikan error
     if (!result) {
       const error = new Error('User is not found');
       error.statusCode = 404;

@@ -2,6 +2,8 @@ const router = require('express').Router();
 
 const links = require('./links');
 const dashboard = require('./dashboard');
+const auth = require('./auth');
+const { verifyAccToken } = require('../middlewares/verifyToken');
 
 router.get('/', (req, res) => {
   res.json({
@@ -10,6 +12,7 @@ router.get('/', (req, res) => {
 });
 
 router.use('/links', links);
-router.use('/dashboard', dashboard);
+router.use(auth);
+router.use('/dashboard', verifyAccToken, dashboard);
 
 module.exports = router;

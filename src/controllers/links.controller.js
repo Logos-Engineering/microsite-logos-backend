@@ -15,7 +15,7 @@ async function postLinkController(req, res, next) {
   } = req.body;
 
   try {
-    // mengembalikan id kategori
+    // cari atau buat kategori
     const categoryId = await model.Category.findOrCreate({
       where: {
         name: category,
@@ -49,7 +49,7 @@ async function postLinkController(req, res, next) {
 
       payload.WebinarId = webinar.id;
 
-      // memasukkan payload data link ke tabel microsite
+      // menyimpan data link ke DB
       const resultCreate = await model.Microsite.create(payload);
       res.status(201);
       return res.json({
@@ -66,7 +66,7 @@ async function postLinkController(req, res, next) {
       });
     }
 
-    // memasukkan payload data link ke tabel microsite
+    // menyimpan data link ke DB
     const resultCreate = await model.Microsite.create(payload);
 
     res.status(201);
@@ -100,7 +100,7 @@ async function getAllLinksController(req, res, next) {
       ],
     });
 
-    // menyusun property
+    // menyusun data link
     const orderingProp = result.map((value) => ({
       id: value.id,
       name: value.name,
@@ -175,7 +175,7 @@ async function putLinkByIdController(req, res, next) {
           id: webinarId,
         },
       });
-      // menghapus gambar lama
+      // menghapus gambar yang lama
       fs.unlink(`${process.cwd()}/${dataWebinar.image}`, (err) => {
         if (err) {
           throw new Error('Internal server error');

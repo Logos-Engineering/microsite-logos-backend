@@ -1,42 +1,42 @@
 /* eslint-disable no-undef */
 const chai = require('chai');
-const chaiHttp = require('chai-http');
+const { expect } = chai;
 
-const should = chai.should();
+const chaiHttp = require('chai-http');
 
 const app = require('../server');
 const model = require('../src/models/index');
 
 chai.use(chaiHttp);
 
-describe('GET /api/links', () => {
-  const data = [
-    {
-      name: 'Link 1',
-      link: 'url 1',
-      publish: true,
-      Category: {
-        name: 'donasi',
-      },
+const data = [
+  {
+    name: 'Link 1',
+    link: 'url 1',
+    publish: true,
+    Category: {
+      name: 'donasi',
     },
-    {
-      name: 'Link 2',
-      link: 'url 2',
-      publish: false,
-      Category: {
-        name: 'partnership',
-      },
+  },
+  {
+    name: 'Link 2',
+    link: 'url 2',
+    publish: false,
+    Category: {
+      name: 'partnership',
     },
-    {
-      name: 'Link 3',
-      link: 'url 3',
-      publish: true,
-      Category: {
-        name: 'sosial media',
-      },
+  },
+  {
+    name: 'Link 3',
+    link: 'url 3',
+    publish: true,
+    Category: {
+      name: 'sosial media',
     },
-  ];
+  },
+];
 
+describe('Endpoint test for public data', () => {
   // inisialisasi koneksi DB
   before((done) => {
     model.sequelize.sync({ force: true })
@@ -57,9 +57,9 @@ describe('GET /api/links', () => {
       chai.request(app)
         .get('/api/links')
         .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.have.property('data');
-          res.body.data.should.have.all.keys('donasi', 'sosial media');
+          expect(res).to.have.status(200);
+          expect(res.body).to.have.property('data');
+          expect(res.body.data).to.have.all.keys('donasi', 'sosial media');
           done();
         });
     });

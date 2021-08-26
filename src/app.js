@@ -12,7 +12,7 @@ const uploadMiddleware = require('./middlewares/uploadImage');
 const app = express();
 
 if (process.env.NODE_ENV !== 'test') {
-  // koneksi db
+  // koneksi ke db
   (async () => {
     try {
       if (process.env.NODE_ENV === 'prod') {
@@ -24,7 +24,7 @@ if (process.env.NODE_ENV !== 'test') {
 
       await model.User.create({
         username: 'user test',
-        password: 'slslwww',
+        password: 'Slslwww8s7s8ss',
       });
     } catch (error) {
       process.stdout(error);
@@ -36,7 +36,7 @@ if (process.env.NODE_ENV !== 'test') {
 app.use(morgan('dev'));
 app.use(helmet());
 app.use(cors());
-// parse application/json
+// parse untuk application/json
 app.use(express.json());
 
 // Set folder public menjadi static-file
