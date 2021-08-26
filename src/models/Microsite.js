@@ -1,5 +1,5 @@
-module.exports = (sequelize, Sequelize) => (
-  sequelize.define('Microsite', {
+module.exports = function(sequelize, Sequelize) {
+  return sequelize.define('Microsite', {
     id: {
       type: Sequelize.UUID,
       defaultValue: Sequelize.UUIDV4,
@@ -18,5 +18,5 @@ module.exports = (sequelize, Sequelize) => (
       allowNull: false,
       defaultValue: false,
     },
-  })
-);
+  });
+};

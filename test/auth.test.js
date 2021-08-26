@@ -35,7 +35,7 @@ let refToken;
 
 describe('Testing for authentication and authorization systems', () => {
   before((done) => {
-    model.sequelize.sync({ force: true })
+    model.initForce()
       .then(() => {
         process.stdout.write(`Connection has been established successfully.\n`);
         return model.User.create(user);

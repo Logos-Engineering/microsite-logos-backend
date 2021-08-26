@@ -71,7 +71,7 @@ const wrongPasswordUserUpdate = {
 
 describe('Testing CRUD for user data', () => {
   before((done) => {
-    model.sequelize.sync({ force: true })
+    model.initForce()
       .then(() => {
         process.stdout.write(`Connection has been established successfully.\n`);
         return model.User.create(superadmin);
