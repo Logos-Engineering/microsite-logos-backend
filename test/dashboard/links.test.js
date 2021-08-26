@@ -19,8 +19,9 @@ let idLinkDataWebinar;
 let pathImgWebinar;
 
 const user = {
-  username: 'user test',
+  username: 'usertest',
   password: 'Slslwww8s7s8ss',
+  role: 'admin',
 };
 
 const linkdata = {
@@ -141,7 +142,10 @@ describe('Testing CRUD for link data', () => {
       }).then(() => {
         chai.request(server)
           .post('/api/auth')
-          .send(user)
+          .send({
+            username: user.username,
+            password: user.password,
+          })
           .end((err, res) => {
             if (err) done(err);
             const { accessToken, refreshToken } = res.body.data;
