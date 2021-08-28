@@ -211,7 +211,6 @@ describe('Testing CRUD for link data', () => {
           const { data } = res.body;
           idLinkDataWebinar = data.id;
           pathImgWebinar = data.image;
-          console.log(pathImgWebinar);
 
           expect(res).to.have.status(201);
           expect(res.body).to.have.property('data');
