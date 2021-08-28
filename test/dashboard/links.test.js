@@ -19,8 +19,9 @@ let idLinkDataWebinar;
 let pathImgWebinar;
 
 const user = {
-  username: 'user test',
+  username: 'usertest',
   password: 'Slslwww8s7s8ss',
+  role: 'admin',
 };
 
 const linkdata = {
@@ -134,14 +135,17 @@ const invalidLinkDataWebinar = [
 
 describe('Testing CRUD for link data', () => {
   before((done) => {
-    model.sequelize.sync({ force: true })
+    model.initForce()
       .then(() => {
         process.stdout.write(`Connection has been established successfully.\n`);
         return model.User.create(user);
       }).then(() => {
         chai.request(server)
           .post('/api/auth')
-          .send(user)
+          .send({
+            username: user.username,
+            password: user.password,
+          })
           .end((err, res) => {
             if (err) done(err);
             const { accessToken, refreshToken } = res.body.data;

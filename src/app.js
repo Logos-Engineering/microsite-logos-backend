@@ -16,18 +16,20 @@ if (process.env.NODE_ENV !== 'test') {
   (async () => {
     try {
       if (process.env.NODE_ENV === 'prod') {
-        await model.sequelize.sync();
+        await model.init();
       } else {
-        await model.sequelize.sync({ force: true });
+        await model.initForce();
       }
       process.stdout.write(`Connection has been established successfully.\n`);
 
       await model.User.create({
-        username: 'user test',
-        password: 'Slslwww8s7s8ss',
+        username: process.env.USER_ROOT,
+        password: process.env.PASS,
+        role: process.env.ROLE,
       });
     } catch (error) {
-      process.stdout(error);
+      // process.stdout.write(error);
+      console.error(error);
     }
   })();
 }

@@ -39,7 +39,7 @@ const data = [
 describe('Endpoint test for public data', () => {
   // inisialisasi koneksi DB
   before((done) => {
-    model.sequelize.sync({ force: true })
+    model.initForce()
       .then(() => {
         process.stdout.write(`Connection has been established successfully.\n`);
         return model.Microsite.bulkCreate(data, { include: [model.Category] });

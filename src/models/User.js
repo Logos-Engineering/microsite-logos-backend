@@ -24,6 +24,12 @@ module.exports = function (sequelize, Sequelize) {
         return this.getDataValue('salt');
       },
     },
+    role: {
+      type: Sequelize.STRING,
+      get() {
+        return this.getDataValue('role');
+      },
+    },
   });
 
   const setSaltAndPassword = (user) => {
@@ -37,8 +43,8 @@ module.exports = function (sequelize, Sequelize) {
   User.beforeCreate(setSaltAndPassword);
   User.beforeUpdate(setSaltAndPassword);
 
-  // return true if input password encrypted is equal with the password that is saved on DB
-  User.prototype.verifyPassword = function (inputPassword) {
+  // mengemballikan true jika inputPassword = password di dalam DB
+  User.prototype.verifyPassword = function(inputPassword) {
     return encryptPassword(inputPassword, this.salt) === this.password;
   };
 
