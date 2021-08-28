@@ -1,5 +1,7 @@
 const model = require('../models/index');
 
+const { ClientErrors, NotFoundError, AuthorizationError } = require('../middlewares/error');
+
 async function postUserController(req, res, next) {
   let { username, password, role = 'admin' } = req.body;
   role = 'admin';
@@ -12,8 +14,8 @@ async function postUserController(req, res, next) {
     });
 
     if (checkUsername) {
-      const error = new Error('Username already exists');
-      error.statusCode = 400;
+      const error = new ClientErrors('The username already exists');
+      error.statusCode = 409;
       throw error;
     }
 
@@ -60,7 +62,7 @@ async function putUserByIdController(req, res, next) {
     });
 
     if (!user) {
-      const error = new Error('User is not found');
+      const error = new NotFoundError('The user is not found');
       error.statusCode = 404;
       throw error;
     }
@@ -69,8 +71,7 @@ async function putUserByIdController(req, res, next) {
     const resultVerifyPass = user.verifyPassword(oldPassword);
 
     if (!resultVerifyPass) {
-      const error = new Error('Password is wrong');
-      error.statusCode = 403;
+      const error = new AuthorizationError('Incorrect password');
       throw error;
     }
 
@@ -104,8 +105,7 @@ async function deleteUserByIdController(req, res, next) {
 
     // jika data user tdk ada maka kembalikan error
     if (!result) {
-      const error = new Error('User is not found');
-      error.statusCode = 404;
+      const error = new NotFoundError('The user is not found');
       throw error;
     }
 

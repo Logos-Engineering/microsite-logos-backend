@@ -144,7 +144,7 @@ describe('Testing CRUD for user data', () => {
       });
     });
 
-    it('it adds an already username. It should respond with status 400 and error property', (done) => {
+    it('it adds an already username. It should respond with status 409 and error property', (done) => {
       chai.request(server)
         .post(endpoint)
         .set('Authorization', `Bearer ${accToken}`)
@@ -152,9 +152,9 @@ describe('Testing CRUD for user data', () => {
         .end((err, res) => {
           if (err) done(err);
 
-          expect(res).to.have.status(400);
+          expect(res).to.have.status(409);
           expect(res.body).to.have.property('error');
-          expect(res.body.error).to.have.property('message').that.is.an('string');
+          expect(res.body.error).to.have.property('messages').that.is.an('string');
           done();
         });
     });
@@ -247,7 +247,7 @@ describe('Testing CRUD for user data', () => {
           if (err) done(err);
 
           expect(res).to.have.status(404);
-          expect(res.body.error).to.have.property('message', 'User is not found');
+          expect(res.body.error).to.have.property('message', 'The user is not found');
           done();
         });
     });

@@ -28,8 +28,7 @@ if (process.env.NODE_ENV !== 'test') {
         role: process.env.ROLE,
       });
     } catch (error) {
-      // process.stdout.write(error);
-      console.error(error);
+      process.stdout.write(error);
     }
   })();
 }

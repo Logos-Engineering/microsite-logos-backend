@@ -2,6 +2,7 @@
 const fs = require('fs');
 
 const model = require('../models/index');
+const { ClientErrors, NotFoundError } = require('../middlewares/error');
 
 async function postLinkController(req, res, next) {
   // mengambil payload yang telah lolos dari validator
@@ -35,8 +36,7 @@ async function postLinkController(req, res, next) {
     if (category === 'webinar') {
       // jika gambar tidak diupload maka respon dengan error
       if (!req.file) {
-        const error = new Error('Image has to upload');
-        error.statusCode = 400;
+        const error = new ClientErrors('Image has to upload');
         throw error;
       }
 
@@ -140,8 +140,7 @@ async function putLinkByIdController(req, res, next) {
     });
 
     if (!dataMicrosite) {
-      const error = new Error('Data is not found');
-      error.statusCode = 404;
+      const error = new NotFoundError('The data is not found');
       throw error;
     }
 
@@ -162,8 +161,7 @@ async function putLinkByIdController(req, res, next) {
     if (category === 'webinar') {
       // jika gambar tidak diupload maka respon dengan error
       if (!req.file) {
-        const error = new Error('Image has to upload');
-        error.statusCode = 400;
+        const error = new ClientErrors('Image has to upload');
         throw error;
       }
 
@@ -178,7 +176,7 @@ async function putLinkByIdController(req, res, next) {
       // menghapus gambar yang lama
       fs.unlink(`${process.cwd()}/${dataWebinar.image}`, (err) => {
         if (err) {
-          throw new Error('Internal server error');
+          throw new Error();
         }
       });
 
@@ -224,7 +222,7 @@ async function deleteLinkByIdController(req, res, next) {
 
     // jika data link tidak ditemukan
     if (!dataMicrosite) {
-      const error = new Error('Link data is not found');
+      const error = new NotFoundError('Link data is not found');
       error.statusCode = 404;
       throw error;
     }
@@ -243,8 +241,7 @@ async function deleteLinkByIdController(req, res, next) {
       // hapus gambar webinar
       fs.unlink(`${process.cwd()}/${pathImg}`, (err) => {
         if (err) {
-          const error = new Error('Fail deleted an image file');
-          error.statusCode = 500;
+          const error = new Error();
           throw error;
         }
       });
