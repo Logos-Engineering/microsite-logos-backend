@@ -1,9 +1,3 @@
-function notFound(req, res, next) {
-  const error = new Error(`Not Found - ${req.originalUrl}`);
-  error.statusCode = 404;
-  next(error);
-}
-
 function ClientErrors(messages, statusCode = 400) {
   this.messages = messages;
   this.statusCode = statusCode;
@@ -11,9 +5,35 @@ function ClientErrors(messages, statusCode = 400) {
   this.stack = (new Error()).stack;
 }
 
+function NotFoundError(message = 'The resource is not found', statusCode = 404) {
+  this.message = message;
+  this.statusCode = statusCode;
+  this.name = 'NotFoundError';
+  this.stack = (new Error()).stack;
+}
+
+function AuthenticationError(message, statusCode = 401) {
+  this.message = message;
+  this.statusCode = statusCode;
+  this.name = 'AuthenticationError';
+  this.stack = (new Error()).stack;
+}
+
+function AuthorizationError(message, statusCode = 403) {
+  this.message = message;
+  this.statusCode = statusCode;
+  this.name = 'AuthorizationError';
+  this.stack = (new Error()).stack;
+}
+
+function notFound(req, res, next) {
+  const error = new NotFoundError(`Not Found - ${req.originalUrl}`);
+  next(error);
+}
+
 function errorHandler(err, req, res, next) {
   if (err.name === 'ClientErrors') {
-    // process.stdout.write(`${err.stack}\n`);
+    process.stdout.write(`${err.stack}\n`);
     res.status(err.statusCode);
     return res.json({
       error: {
@@ -22,14 +42,27 @@ function errorHandler(err, req, res, next) {
     });
   }
 
-  // process.stdout.write(`${err.stack}\n`);
+  if (
+    err.name === 'NotFoundError'
+    || err.name === 'AuthenticationError'
+    || err.name === 'AuthorizationError'
+  ) {
+    process.stdout.write(`${err.stack}\n`);
+    res.status(err.statusCode);
+    return res.json({
+      error: {
+        message: err.message,
+      },
+    });
+  }
 
-  const statusCode = err.statusCode ? err.statusCode : 500;
-  res.status(statusCode);
+  process.stdout.write(`${err.stack}\n`);
+
+  res.status(500);
 
   return res.json({
     error: {
-      message: err.message || 'Internal server error',
+      message: 'Internal server error',
     },
   });
 }
@@ -38,4 +71,7 @@ module.exports = {
   notFound,
   errorHandler,
   ClientErrors,
+  NotFoundError,
+  AuthenticationError,
+  AuthorizationError,
 };
