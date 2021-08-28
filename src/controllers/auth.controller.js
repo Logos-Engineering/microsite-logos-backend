@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 
 const model = require('../models/index');
 const { verifyRefToken } = require('../utils/index');
+const { AuthenticationError, AuthorizationError } = require('../middlewares/error');
 
 // controller untuk login user
 async function postAuthController(req, res, next) {
@@ -21,8 +22,7 @@ async function postAuthController(req, res, next) {
     }
 
     if (!user.verifyPassword(password)) {
-      const error = new Error('Incorrect password');
-      error.statusCode = 403;
+      const error = new AuthorizationError('Incorrect password');
       throw error;
     }
 
@@ -89,8 +89,7 @@ async function deleteAuthController(req, res, next) {
     });
 
     if (!result) {
-      const error = new Error('Unauthorized');
-      error.statusCode = 401;
+      const error = new AuthenticationError('Unauthorized');
       throw error;
     }
 

@@ -1,5 +1,7 @@
 const multer = require('multer');
 
+const { ClientErrors } = require('./error');
+
 const imgStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'public/images');
@@ -13,8 +15,7 @@ const fileFilter = (req, file, cb) => {
   if (file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg') {
     cb(null, true);
   } else {
-    const error = new Error('Image must be PNG or JPG or JPEG type');
-    error.statusCode = 400;
+    const error = new ClientErrors('Image must be PNG or JPG or JPEG type');
     cb(error, false);
   }
 };

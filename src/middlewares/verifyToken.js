@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const model = require('../models/index');
+const { AuthenticationError } = require('./error');
 
 // fungsi untuk verifikasi access token
 async function verifyAccToken(req, res, next) {
@@ -13,8 +14,7 @@ async function verifyAccToken(req, res, next) {
       const token = splitHeader[1];
 
       if (bearer !== 'Bearer') {
-        const error = new Error('Unauthorized');
-        error.statusCode = 401;
+        const error = new AuthenticationError('Unauthorized');
         throw error;
       }
 
@@ -22,12 +22,10 @@ async function verifyAccToken(req, res, next) {
       await jwt.verify(token, process.env.ACCESS_TOKEN_KEY, async (err, decode) => {
         if (err) {
           if (err.name !== 'TokenExpiredError') {
-            const error = new Error(err.message);
-            error.statusCode = 403;
+            const error = new AuthenticationError(err.message);
             throw error;
           }
-          const error = new Error('Access token has Expired');
-          error.statusCode = 401;
+          const error = new AuthenticationError('Access token has Expired');
           throw error;
         }
 
@@ -35,8 +33,7 @@ async function verifyAccToken(req, res, next) {
         const user = await model.User.findByPk(decode.id);
 
         if (!user) {
-          const error = new Error('Unauthorized');
-          error.statusCode = 401;
+          const error = new AuthenticationError('Unauthorized');
           throw error;
         }
         // kembalikan data user
@@ -44,8 +41,7 @@ async function verifyAccToken(req, res, next) {
         next();
       });
     } else {
-      const error = new Error('Unauthorized');
-      error.statusCode = 401;
+      const error = new AuthenticationError('Unauthorized');
       throw error;
     }
   } catch (error) {

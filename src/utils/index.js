@@ -1,6 +1,8 @@
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
+const { AuthenticationError } = require('../middlewares/error');
+
 // membuat garam untuk campuran password
 function generateSalt() {
   return crypto.randomBytes(16).toString('base64');
@@ -24,8 +26,7 @@ async function verifyRefToken(model, refreshToken) {
   });
 
   if (!checkRefTokenInDB) {
-    const error = new Error('Unauthorized');
-    error.statusCode = 401;
+    const error = new AuthenticationError('Unauthorized');
     throw error;
   }
 
@@ -36,18 +37,16 @@ async function verifyRefToken(model, refreshToken) {
     async (err, decode) => {
       if (err) {
         if (err.name !== 'TokenExpiredError') {
-          const error = new Error(err.message);
-          error.statusCode = 403;
+          const error = new AuthenticationError(err.message);
           throw error;
         }
-        const error = new Error('Refresh token has Expired');
+        const error = new AuthenticationError('Refresh token has Expired');
         // jika refresh token expired maka refresh token yang di DB dihapus
         await model.Authentication.destroy({
           where: {
             refreshToken,
           },
         });
-        error.statusCode = 401;
         throw error;
       }
 
@@ -55,8 +54,7 @@ async function verifyRefToken(model, refreshToken) {
       const user = await model.User.findByPk(decode.id);
 
       if (!user) {
-        const error = new Error('Unauthorized');
-        error.statusCode = 401;
+        const error = new AuthenticationError('Unauthorized');
         throw error;
       }
       return user;
