@@ -33,7 +33,6 @@ function notFound(req, res, next) {
 
 function errorHandler(err, req, res, next) {
   if (err.name === 'ClientErrors') {
-    process.stdout.write(`${err.stack}\n`);
     res.status(err.statusCode);
     return res.json({
       error: {
@@ -47,7 +46,6 @@ function errorHandler(err, req, res, next) {
     || err.name === 'AuthenticationError'
     || err.name === 'AuthorizationError'
   ) {
-    process.stdout.write(`${err.stack}\n`);
     res.status(err.statusCode);
     return res.json({
       error: {
