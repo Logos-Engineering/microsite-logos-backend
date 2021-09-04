@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [ development ]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      NODE_ENV: test
+      USER_ROOT: usertest10
+      PASS: Slslwww8s7s8ss
+      ROLE: superadmin
+      ACCESS_TOKEN_KEY: ini secret
+      REFRESH_TOKEN_KEY: secret ini
+      JWT_ACC_TOKEN_EXP: 15s
+      JWT_REF_TOKEN_EXP: 2d
+      NAME_DB_DEV: ${{ secrets.NAME_DB_DEV }}
+      HOST_DB: ${{ secrets.HOST_DB }}
+      PASS_DB: ${{ secrets.PASS_DB }}
+      USER_DB: ${{ secrets.USER_DB }}
+      PORT_DB: ${{ secrets.PORT_DB}}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Starting test
+      uses: actions/setup-node@v2
+      with:
+        node-version: 14.x
+        cache: 'npm'
+    - run: npm i
+    - run: npm run build --if-present
+    - run: npm test
