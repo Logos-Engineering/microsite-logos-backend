@@ -1,0 +1,35 @@
+{
+  "name": "microsite-logos-backend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start:prod": "pm2 start ecosystem.config.js --env prod",
+    "start:dev": "pm2 start ecosystem.config.js --env dev",
+    "dev": "NODE_ENV=dev nodemon server.js",
+    "test": "NODE_ENV=test mocha --timeout 50000 --recursive --exit",
+    "lint": "./node_modules/.bin/eslint"
+  },
+  "author": "Logos Backend Team",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-validator": "^6.12.1",
+    "helmet": "^4.6.0",
+    "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.3",
+    "mysql2": "^2.2.5",
+    "sequelize": "^6.6.5"
+  },
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "chai-http": "^4.3.0",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.24.0",
+    "mocha": "^9.0.3",
+    "nodemon": "^2.0.12"
+  }
+}
