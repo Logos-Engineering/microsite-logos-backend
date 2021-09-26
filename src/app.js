@@ -11,27 +11,25 @@ const uploadMiddleware = require('./middlewares/uploadImage');
 
 const app = express();
 
-if (process.env.NODE_ENV !== 'test') {
-  // koneksi ke db
-  (async () => {
-    try {
-      if (process.env.NODE_ENV === 'prod') {
-        await model.init();
-      } else {
-        await model.initForce();
-      }
-      process.stdout.write(`Connection has been established successfully.\n`);
-
-      await model.User.create({
-        username: process.env.USER_ROOT,
-        password: process.env.PASS,
-        role: process.env.ROLE,
-      });
-    } catch (error) {
-      process.stdout.write(error);
+// koneksi ke DB
+(async () => {
+  try {
+    if (process.env.NODE_ENV === 'prod') {
+      await model.init();
+    } else {
+      await model.initForce();
     }
-  })();
-}
+    process.stdout.write(`Connection has been established successfully.\n`);
+
+    await model.User.create({
+      username: process.env.USER_ROOT,
+      password: process.env.PASS,
+      role: process.env.ROLE,
+    });
+  } catch (error) {
+    process.stdout.write(error);
+  }
+})();
 
 // Middleware
 app.use(morgan('dev'));
