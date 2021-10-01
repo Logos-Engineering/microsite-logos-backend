@@ -3,16 +3,23 @@ const dbConfig = require('../config/db.config');
 
 function Model() {
   this._sequelize = new Sequelize(
-    dbConfig.DB,
-    dbConfig.USER,
-    dbConfig.PASSWORD,
+    // dbConfig.DB,
+    // dbConfig.USER,
+    // dbConfig.PASSWORD,
+    process.env.DATABASE_URL,
     {
-      host: dbConfig.HOST,
+      // host: dbConfig.HOST,
       dialect: dbConfig.dialect,
       operatorsAliases: false,
       logging: false,
-      options: {
-        port: dbConfig.PORT,
+      // options: {
+      //   port: dbConfig.PORT,
+      // },
+      dialectOptions: {
+        ssl: {
+          require: true,
+          rejectUnauthorized: false,
+        },
       },
       pool: {
         max: dbConfig.pool.max,
