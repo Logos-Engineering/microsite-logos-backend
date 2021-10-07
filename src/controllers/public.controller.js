@@ -1,30 +1,15 @@
-const model = require('../models/index');
+const getAllLink = require('../services/public.service');
 
 async function getAllLinksPublic(req, res, next) {
   try {
     // dapatkan semua link berdasarkan field publish bernilai true
-    const dataLinks = await model.Microsite.findAll({
-      attributes: ['name', 'link'],
-      where: {
-        publish: true,
-      },
-      include: [
-        {
-          model: model.Category,
-          attributes: ['name'],
-        },
-        {
-          model: model.Webinar,
-          attributes: ['title', 'image', 'summary'],
-        },
-      ],
-    });
+    const dataLinks = await getAllLink();
 
-    let reconstructData = [];
+    let arrData = [];
 
     if (dataLinks.length > 0) {
       // pengelompokan data link berdasarkan kategori
-      reconstructData = dataLinks.reduce((map, value) => {
+      arrData = dataLinks.reduce((map, value) => {
         map[value.Category.name] = [
           ...(map[value.Category.name] || []),
           {
@@ -39,7 +24,7 @@ async function getAllLinksPublic(req, res, next) {
       }, {});
     }
 
-    res.status(200).json({ data: reconstructData });
+    res.status(200).json({ data: arrData });
   } catch (error) {
     next(error);
   }
