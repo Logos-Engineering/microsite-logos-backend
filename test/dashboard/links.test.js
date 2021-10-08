@@ -469,7 +469,7 @@ describe('Testing CRUD for link data', () => {
           if (err) done(err);
 
           expect(res).to.have.status(404);
-          expect(res.body.error).to.have.property('message', 'Link data is not found');
+          expect(res.body.error).to.have.property('message', 'The data is not found');
           done();
         });
     });
@@ -482,7 +482,7 @@ describe('Testing CRUD for link data', () => {
           if (err) done(err);
 
           expect(res).to.have.status(404);
-          expect(res.body.error).to.have.property('message', 'Link data is not found');
+          expect(res.body.error).to.have.property('message', 'The data is not found');
           done();
         });
     });
@@ -495,7 +495,7 @@ describe('Testing CRUD for link data', () => {
           if (err) done(err);
 
           expect(res).to.have.status(404);
-          expect(res.body.error).to.have.property('message', 'Link data is not found');
+          expect(res.body.error).to.have.property('message', 'The data is not found');
           done();
         });
     });
