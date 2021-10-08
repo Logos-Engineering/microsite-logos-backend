@@ -1,5 +1,4 @@
-const fs = require('fs');
-
+const { deleteImage } = require('./image.service');
 const {
   Category,
   Webinar,
@@ -32,7 +31,9 @@ async function addWebinar({ title, image, summary }) {
   return webinar.id;
 }
 
-async function updateWebinar({ linkId, title, image, summary }) {
+async function updateWebinar({
+  linkId, title, image, summary,
+}) {
   if (!image) {
     return Promise.reject(new ClientErrors('Image has to upload'));
   }
@@ -46,12 +47,11 @@ async function updateWebinar({ linkId, title, image, summary }) {
       id: dataMicrosite.WebinarId,
     },
   });
-    // menghapus gambar yang lama
-  fs.unlink(`${process.cwd()}/${dataWebinar.image}`, (err) => {
-    if (err) {
-      return Promise.reject(new NotFoundError('The data is not found'));
-    }
-  });
+  // menghapus gambar yang lama
+  const isDeleted = await deleteImage(dataWebinar.image);
+  if (!isDeleted) {
+    return Promise.reject(isDeleted);
+  }
 
   dataWebinar.title = title;
   dataWebinar.image = image;
@@ -151,11 +151,10 @@ async function deleteLink(id) {
     const pathImg = dataWebinar.image;
 
     // hapus gambar webinar
-    fs.unlink(`${process.cwd()}/${pathImg}`, (err) => {
-      if (err) {
-        return Promise.reject(new NotFoundError('The data is not found'));
-      }
-    });
+    const isDeleted = await deleteImage(pathImg);
+    if (!isDeleted) {
+      return Promise.reject(isDeleted);
+    }
 
     // hapus data webinar
     await Webinar.destroy({
