@@ -33,12 +33,6 @@ async function updateUserById(id, username, oldPassword, newPassword) {
     throw error;
   }
 
-  if (!user) {
-    const error = new NotFoundError('The user is not found');
-    error.statusCode = 404;
-    throw error;
-  }
-
   // verifikasi password
   const resultVerifyPass = user.verifyPassword(oldPassword);
 
