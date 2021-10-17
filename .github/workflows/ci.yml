@@ -8,13 +8,13 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NODE_ENV: test
-      USER_ROOT: usertest10
-      PASS: Slslwww8s7s8ss
-      ROLE: superadmin
-      ACCESS_TOKEN_KEY: ini secret
-      REFRESH_TOKEN_KEY: secret ini
-      JWT_ACC_TOKEN_EXP: 15s
-      JWT_REF_TOKEN_EXP: 2d
+      USER_ROOT: ${{ secrets.USER_ROOT }}
+      PASS: ${{ secrets.PASS }}
+      ROLE: ${{ secrets.ROLE }}
+      ACCESS_TOKEN_KEY: ${{ secrets.ACCESS_TOKEN_KEY }}
+      REFRESH_TOKEN_KEY: ${{ secrets.REFRESH_TOKEN_KEY }}
+      JWT_ACC_TOKEN_EXP: ${{ secrets.JWT_ACC_TOKEN_EXP }}
+      JWT_REF_TOKEN_EXP: ${{ secrets.JWT_REF_TOKEN_EXP }}
       NAME_DB_DEV: ${{ secrets.NAME_DB_DEV }}
       HOST_DB: ${{ secrets.HOST_DB }}
       PASS_DB: ${{ secrets.PASS_DB }}
