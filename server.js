@@ -12,6 +12,7 @@ process.on('SIGTERM', () => {
   process.stdout.write('Closing http server\n');
   server.close(() => {
     model.close();
+    process.exit(0);
   });
 });
 
