@@ -1,54 +1,16 @@
-const jwt = require('jsonwebtoken');
-
-const model = require('../models/index');
-const { verifyRefToken } = require('../utils/index');
-const { AuthenticationError, AuthorizationError } = require('../middlewares/error');
+const { generateToken, updateToken, deleteToken } = require('../services/auth.service');
 
 // controller untuk login user
 async function postAuthController(req, res, next) {
   const { username, password } = req.body;
 
   try {
-    const user = await model.User.findOne({
-      where: {
-        username,
-      },
-    });
-
-    if (!user) {
-      const error = new Error('User is not found');
-      error.statusCode = 404;
-      throw error;
-    }
-
-    if (!user.verifyPassword(password)) {
-      const error = new AuthorizationError('Incorrect password');
-      throw error;
-    }
-
-    const generateAccessToken = jwt.sign({
-      id: user.id,
-      role: user.role,
-    }, process.env.ACCESS_TOKEN_KEY, {
-      expiresIn: process.env.JWT_ACC_TOKEN_EXP,
-    });
-
-    const generateRefreshToken = jwt.sign({
-      id: user.id,
-      role: user.role,
-    }, process.env.REFRESH_TOKEN_KEY, {
-      expiresIn: process.env.JWT_REF_TOKEN_EXP,
-    });
-
-    await model.Authentication.create({
-      refreshToken: generateRefreshToken,
-    });
-
+    const { accessToken, refreshToken } = await generateToken({ username, password });
     res.status(201);
     res.json({
       data: {
-        accessToken: generateAccessToken,
-        refreshToken: generateRefreshToken,
+        accessToken,
+        refreshToken,
       },
     });
   } catch (error) {
@@ -61,16 +23,11 @@ async function putAuthController(req, res, next) {
   const { refreshToken } = req.body;
 
   try {
-    const user = await verifyRefToken(model, refreshToken);
-
-    const generateAccessToken = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN_KEY, {
-      expiresIn: process.env.JWT_ACC_TOKEN_EXP,
-    });
-
+    const { accessToken } = await updateToken(refreshToken);
     res.status(200);
     res.json({
       data: {
-        accessToken: generateAccessToken,
+        accessToken,
       },
     });
   } catch (error) {
@@ -82,17 +39,7 @@ async function putAuthController(req, res, next) {
 async function deleteAuthController(req, res, next) {
   try {
     const { refreshToken } = req.body;
-    const result = await model.Authentication.destroy({
-      where: {
-        refreshToken,
-      },
-    });
-
-    if (!result) {
-      const error = new AuthenticationError('Unauthorized');
-      throw error;
-    }
-
+    await deleteToken(refreshToken);
     res.status(200);
     res.json({
       data: {
