@@ -3,7 +3,7 @@ const dbConfig = require('../config/db.config');
 
 function Model() {
   this._sequelize = new Sequelize(
-    process.env.DATABASE_URL,
+    dbConfig.URI,
     {
       dialect: dbConfig.dialect,
       operatorsAliases: false,
