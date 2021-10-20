@@ -7,7 +7,6 @@ const cors = require('cors');
 const apiRoute = require('./routes/index');
 const model = require('./models/index');
 const errorMiddleware = require('./middlewares/error');
-const uploadMiddleware = require('./middlewares/uploadImage');
 
 const app = express();
 
@@ -39,9 +38,7 @@ app.use(cors());
 app.use(express.json());
 
 // Set folder public menjadi static-file
-app.use('/public', express.static(`${process.cwd()}/public`));
-
-app.use(uploadMiddleware);
+// app.use('/public', express.static(`${process.cwd()}/public`));
 
 // Route
 app.get('/', (req, res) => {
