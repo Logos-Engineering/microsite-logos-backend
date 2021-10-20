@@ -1,7 +1,4 @@
 const crypto = require('crypto');
-const jwt = require('jsonwebtoken');
-
-const { AuthenticationError } = require('../middlewares/error');
 
 // membuat garam untuk campuran password
 function generateSalt() {

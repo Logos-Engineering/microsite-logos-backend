@@ -16,10 +16,12 @@ const { validator } = require('../middlewares/validator/index');
 // authorization
 const authorizationUser = require('../middlewares/authorization');
 
+const uploadMiddleware = require('../middlewares/uploadImage').single('image');
+
 // /api/dashboard/links
-router.post('/links', linkSchema, validator, postLinkController);
+router.post('/links', uploadMiddleware, linkSchema, validator, postLinkController);
 router.get('/links', getAllLinksController);
-router.put('/links/:id', linkSchema, validator, putLinkByIdController);
+router.put('/links/:id', uploadMiddleware, linkSchema, validator, putLinkByIdController);
 router.delete('/links/:id', deleteLinkByIdController);
 
 // hanya superadmin

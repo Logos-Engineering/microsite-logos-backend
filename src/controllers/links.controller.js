@@ -32,7 +32,7 @@ async function postLinkController(req, res, next) {
     // periksa jika kategori = webinar
     // maka simpan gambar yang diupload
     if (category === 'webinar') {
-      webinarPayload.image = req.file ? req.file.path : null;
+      webinarPayload.image = req.file ? req.file.secure_url : null;
       const webinarId = await addWebinar(webinarPayload);
       // sisipkan id webinar ke payload link
       linkPayload.WebinarId = webinarId;
@@ -109,7 +109,7 @@ async function putLinkByIdController(req, res, next) {
     };
 
     if (category === 'webinar') {
-      webinarPayload.image = req.file ? req.file.path : null;
+      webinarPayload.image = req.file ? req.file.secure_url : null;
       // perbarui data webinar
       webinarData = await updateWebinar(webinarPayload);
     }

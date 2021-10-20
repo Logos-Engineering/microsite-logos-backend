@@ -1,4 +1,4 @@
-const { deleteImage } = require('./image.service');
+const { deleteImage } = require('./upload.service');
 const {
   Category,
   Webinar,

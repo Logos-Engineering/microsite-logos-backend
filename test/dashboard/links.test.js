@@ -170,7 +170,7 @@ describe('Testing CRUD for link data', () => {
   });
 
   describe('POST /api/dashboard/links', () => {
-    it('adds valid link data. It should return status 201 and data property with the correct value', (done) => {
+    it('add valid link data. It should return status 201 and data property with the correct value', (done) => {
       chai.request(server)
         .post(endpoint)
         .set('Authorization', `Bearer ${accToken}`)
@@ -194,7 +194,7 @@ describe('Testing CRUD for link data', () => {
         });
     });
 
-    it('adds valid webinar link data. It should return status 201 and data property with the correct value', (done) => {
+    it('add valid webinar link data. It should return status 201 and data property with the correct value', (done) => {
       chai.request(server)
         .post(endpoint)
         .set('Authorization', `Bearer ${accToken}`)
@@ -229,7 +229,7 @@ describe('Testing CRUD for link data', () => {
     });
 
     invalidLinkData.forEach((data) => {
-      it('adds invalid link data. It should return status 400 and messages property with the correct value', (done) => {
+      it('add invalid link data. It should return status 400 and messages property with the correct value', (done) => {
         chai.request(server)
           .post(endpoint)
           .set('Authorization', `Bearer ${accToken}`)
@@ -245,7 +245,7 @@ describe('Testing CRUD for link data', () => {
     });
 
     invalidLinkDataWebinar.forEach((data) => {
-      it('adds invalid webinar link data. It should return status 400 and messages/message property with the correct value', (done) => {
+      it('add invalid webinar link data. It should return status 400 and messages/message property with the correct value', (done) => {
         chai.request(server)
           .post(endpoint)
           .set('Authorization', `Bearer ${accToken}`)
@@ -265,7 +265,7 @@ describe('Testing CRUD for link data', () => {
       });
     });
 
-    it('adds invalid (with few missing fields) webinar link data. It should return status 400 and messages/message property with the correct value', (done) => {
+    it('add invalid (with few missing fields) webinar link data. It should return status 400 and messages/message property with the correct value', (done) => {
       chai.request(server)
         .post(endpoint)
         .set('Authorization', `Bearer ${accToken}`)
@@ -300,8 +300,8 @@ describe('Testing CRUD for link data', () => {
 
   describe('GET /:file', () => {
     it('respond valid image', (done) => {
-      chai.request(server)
-        .get(`/${pathImgWebinar}`)
+      chai.request(pathImgWebinar)
+        .get('')
         .end((err, res) => {
           if (err) done(err);
           expect(res).to.have.status(200);

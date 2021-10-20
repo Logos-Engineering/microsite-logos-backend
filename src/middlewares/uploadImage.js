@@ -1,13 +1,33 @@
 const multer = require('multer');
 
 const { ClientErrors } = require('./error');
+const { addImage } = require('../services/upload.service');
 
-const imgStorage = multer.diskStorage({
+function getDestination(req, file, cb) {
+  cb(null, '/dev/null');
+}
+
+function CloudinaryStorage(opts) {
+  this.getDestination = opts.destination || getDestination;
+}
+
+CloudinaryStorage.prototype._handleFile = function (req, file, cb) {
+  this.getDestination(req, file, (err, path) => {
+    if (err) return cb(err);
+    const mystream = addImage(path, cb);
+
+    file.stream.pipe(mystream);
+  });
+};
+
+CloudinaryStorage.prototype._removeFile = function (req, file, cb) {
+  delete file.stream;
+  cb(null);
+};
+
+const imgStorage = new CloudinaryStorage({
   destination: (req, file, cb) => {
-    cb(null, 'public/images');
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${new Date(Date.now()).toISOString()}-${file.originalname.toLowerCase()}`);
+    cb(null, 'webinar/banner');
   },
 });
 
@@ -23,6 +43,6 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
   storage: imgStorage,
   fileFilter,
-}).single('image');
+});
 
 module.exports = upload;
