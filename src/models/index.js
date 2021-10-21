@@ -36,6 +36,10 @@ function Model() {
   this.initForce = function () {
     return this._sequelize.sync({ force: true });
   };
+
+  this.close = function () {
+    return this._sequelize.close();
+  };
 }
 
 module.exports = (() => {
