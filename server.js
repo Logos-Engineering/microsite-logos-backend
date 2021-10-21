@@ -11,8 +11,9 @@ const server = app.listen(port, () => {
 process.on('SIGTERM', () => {
   process.stdout.write('Closing http server\n');
   server.close(() => {
-    model.close();
-    process.exit(0);
+    model.close().then(() => {
+      process.exit(0);
+    });
   });
 });
 
